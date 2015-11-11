@@ -35,12 +35,11 @@ app.controller('customersCtrl', function($scope, $http,$interval) {
 					console.log("LOOP",response);
 					$scope.jsonData = response;
 					$scope.isRunning = true;
-					$scope.lastPos = Number(response.position);
+					//if(response.position>$scope.lastPos){
+						$scope.lastPos = (Number(response.position)+1);						
+					//}
 					
-					$http.post('/TesteWebaMaven/saveHistory',episodio).success(function(response) {
-						console.log("LOOP",response);
-						
-					});
+					$scope.totalPlayed = Number(($scope.lastPos/$scope.jsonData.duration)*100).toFixed(1);
 				}else{
 					$scope.isRunning = false;
 				}
@@ -50,20 +49,9 @@ app.controller('customersCtrl', function($scope, $http,$interval) {
 		
 		$interval(function() {
 			if($scope.isRunning){
+				//$scope.lastPos += 24006;
 				$scope.lastPos += increment;
 				$scope.totalPlayed = Number(($scope.lastPos/$scope.jsonData.duration)*100).toFixed(1);
-				if($scope.totalPlayed>=100){
-					$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
-						if(response.statusType=="RUNNING"){
-							console.log("LOOP 2",response);
-							$scope.isRunning = true;
-							$scope.jsonData = response;
-							$scope.lastPos = Number(response.position);
-						}else{
-							$scope.isRunning = false;
-						}	
-					});	
-				}
 			}	
 		}, increment); 
 	});
