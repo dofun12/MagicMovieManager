@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="seriesCtrl">
+	<div ng-show="isRunning"> 
+		{{jsonData.file}}
+		{{jsonData.filepatharg}}
+		{{jsonData.positionstring}}
+		{{lastPos}}
+		{{jsonData.duration}}
+		{{totalPlayed}}
+	</div>
+	<div style="width:100%;margin:0 auto;display:flex">
+		<div style="width: 400px;">
+			<div ng-repeat="serie in seriesList"> 
+				<button style="width:100%;padding:10px;" ng-click="selecionarSerie(serie)">{{serie.title}}</button>
+			</div>
+		</div>
+		<div style="float:right;margin-left:20px;">
+			<div ng-show="isSerieSelecionada">
+				<div ng-repeat="file in selectedSerie.files">
+					<span>{{selectedSerie.title+' - '+file.episodio}}</span> 
+					<button ng-click="play(file)">Play</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+	
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('seriesCtrl', function($scope, $http,$interval) {
+	$scope.isSerieSelecionada = false;
+	
+	$http.get('/TesteWebaMaven/listarSeries').success(function(response) {
+		$scope.seriesList = response;
+		console.log("LOOP",response);
+		
+	});	
+	
+	
+	
+	$scope.selecionarSerie = function(obj){
+		$scope.selectedSerie = obj;
+		$scope.isSerieSelecionada = true;
+	};
+	
+	$scope.play = function(episodio){
+		console.log(episodio);
+		$http.post('/TesteWebaMaven/play',episodio).success(function(response) {
+			console.log("LOOP",response);
+			$scope.playSession(episodio);
+		});	
+	};
+	
+	$scope.playSession = function(episodio){
+		
+		var delay = 3000;
+		var increment = 1000;
+		$scope.isRunning = false;
+		
+		$scope.lastPos = 0;
+		$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
+			$scope.jsonData = response;
+			$scope.totalPlayed = 0;
+			
+			console.log(response);
+			$interval(function() {
+				$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
+					console.log("LOOP",response);
+					if(response.statusType=="RUNNING"){
+						console.log("LOOP",response);
+						$scope.jsonData = response;
+						$scope.isRunning = true;
+						$scope.lastPos = Number(response.position);
+						
+						var objects = {
+							media:episodio,
+							status:response
+						};
+						console.log("Salving",objects);
+						
+						$http.post('/TesteWebaMaven/saveHistory',objects,{}).success(function(response) {
+							console.log("Salved",response);
+						});
+					}else{
+						$scope.isRunning = false;
+					}
+				});
+				
+			}, delay);
+			
+			$interval(function() {
+				if($scope.isRunning){
+					$scope.lastPos += increment;
+					$scope.totalPlayed = Number(($scope.lastPos/$scope.jsonData.duration)*100).toFixed(1);
+					if($scope.totalPlayed>=100){
+						$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
+							if(response.statusType=="RUNNING"){
+								console.log("LOOP 2",response);
+								$scope.isRunning = true;
+								$scope.jsonData = response;
+								$scope.lastPos = Number(response.position);
+							}else{
+								$scope.isRunning = false;
+							}	
+						});	
+					}
+				}	
+			}, increment); 
+		});
+		
+	};
+	
+});
+</script>
+
+</body>
+</html>
