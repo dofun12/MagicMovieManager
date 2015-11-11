@@ -6,20 +6,24 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SerieSource {
+public class SerieModel {
     	private Integer id;
-	private String title;
-	private List<MediaFileModel> files = new ArrayList<MediaFileModel>();
+	private String name;
+	private List<SerieFileModel> files = new ArrayList<SerieFileModel>();
 	
-	public SerieSource(String title,String path,String regex){
-		this.title = title;
+	public SerieModel() {
+	    
+	}
+	
+	public SerieModel(String title,String path,String regex){
+		this.name = title;
 		File file = new File(path);
 		for(File media:file.listFiles()){
 			String name = media.getName();
 			
 			String epName = getVarEpisodio(name, regex);
 			
-			MediaFileModel mediaFile = new MediaFileModel();
+			SerieFileModel mediaFile = new SerieFileModel();
 			mediaFile.setEpisodio(epName);
 			mediaFile.setFile(media);
 			
@@ -37,20 +41,20 @@ public class SerieSource {
 		return null;
 	}
 
-	public List<MediaFileModel> getFiles() {
+	public List<SerieFileModel> getFiles() {
 		return files;
 	}
 
-	public void setFiles(List<MediaFileModel> files) {
+	public void setFiles(List<SerieFileModel> files) {
 		this.files = files;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Integer getId() {

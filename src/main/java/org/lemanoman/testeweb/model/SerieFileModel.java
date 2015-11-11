@@ -2,9 +2,10 @@ package org.lemanoman.testeweb.model;
 
 import java.io.File;
 
-public class MediaFileModel {
+public class SerieFileModel {
 	private String episodio;
 	private File file;
+	private Integer idSerie;
 	
 	public String getEpisodio() {
 		return episodio;
@@ -18,5 +19,12 @@ public class MediaFileModel {
 	public void setFile(File file) {
 		this.file = file;
 	}
+	public Integer getIdSerie() {
+	    return idSerie;
+	}
+	public void setIdSerie(Integer idSerie) {
+	    this.idSerie = idSerie;
+	}
+	
 	
 }

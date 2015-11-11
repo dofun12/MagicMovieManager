@@ -3,7 +3,7 @@ package org.lemanoman.testeweb.service.impl;
 import java.util.List;
 
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
-import org.lemanoman.testeweb.model.SerieSource;
+import org.lemanoman.testeweb.model.SerieModel;
 import org.lemanoman.testeweb.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +16,16 @@ public class SerieServiceImpl implements SerieService{
     private JdbcSerieDAO dao;
 
     @Override
-    public List<SerieSource> listarSeries() {
-	return dao.listAll();
+    public List<SerieModel> listarSeriesOffline() {
+	return dao.listarSeriesOffline();
     }
     
+    public void updateCatalogo() {
+	dao.updateCatalogo();
+    }
+    
+    public List<SerieModel> listarSeries() {
+	return dao.listarSeries();
+    }
     
 }

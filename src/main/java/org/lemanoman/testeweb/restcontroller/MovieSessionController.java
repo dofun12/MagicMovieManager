@@ -22,8 +22,8 @@ import org.jsoup.nodes.Element;
 import org.lemanoman.testeweb.model.GreetingModel;
 import org.lemanoman.testeweb.model.MPHCResponseModel;
 import org.lemanoman.testeweb.model.MPHCStatusType;
-import org.lemanoman.testeweb.model.MediaFileModel;
-import org.lemanoman.testeweb.model.SerieSource;
+import org.lemanoman.testeweb.model.SerieFileModel;
+import org.lemanoman.testeweb.model.SerieModel;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,7 +38,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class MovieSessionController {
 
 	@RequestMapping(value = "/play", method = RequestMethod.POST)
-	public void playMovie(@RequestBody MediaFileModel media) {
+	public void playMovie(@RequestBody SerieFileModel media) {
 		if(media!=null){
 			System.out.println(media.getFile().getAbsolutePath());
 			try {

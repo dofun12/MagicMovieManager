@@ -3,14 +3,14 @@ package org.lemanoman.testeweb.model;
 import java.util.Date;
 
 public class HistoryModel {
-	private MediaFileModel media;
+	private SerieFileModel media;
 	private MPHCResponseModel status;
 	private Date lastTimeWatched;
 	
-	public MediaFileModel getMedia() {
+	public SerieFileModel getMedia() {
 		return media;
 	}
-	public void setMedia(MediaFileModel media) {
+	public void setMedia(SerieFileModel media) {
 		this.media = media;
 	}
 	public MPHCResponseModel getStatus() {

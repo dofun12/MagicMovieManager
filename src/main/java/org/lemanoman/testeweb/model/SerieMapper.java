@@ -1,5 +1,6 @@
 package org.lemanoman.testeweb.model;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -8,11 +9,11 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
-public class SerieSourceMapper implements ResultSetExtractor<List<SerieSource>> {
+public class SerieMapper implements ResultSetExtractor<List<SerieModel>> {
 
-    public List<SerieSource> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    public List<SerieModel> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
-	List<SerieSource> series = new LinkedList<SerieSource>();
+	List<SerieModel> series = new LinkedList<SerieModel>();
 
 	if (rs != null) {
 	    while (rs.next()) {
@@ -20,8 +21,8 @@ public class SerieSourceMapper implements ResultSetExtractor<List<SerieSource>> 
 		String name = rs.getString("nome");
 		String path = rs.getString("path");
 		String regex = rs.getString("regex");
-		
-		SerieSource serie = new SerieSource(name, path, regex);
+
+		SerieModel serie = new SerieModel(name, path, regex);
 		serie.setId(id);
 		series.add(serie);
 	    }

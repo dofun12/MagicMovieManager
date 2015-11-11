@@ -23,8 +23,8 @@ import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.GreetingModel;
 import org.lemanoman.testeweb.model.MPHCResponseModel;
 import org.lemanoman.testeweb.model.MPHCStatusType;
-import org.lemanoman.testeweb.model.MediaFileModel;
-import org.lemanoman.testeweb.model.SerieSource;
+import org.lemanoman.testeweb.model.SerieFileModel;
+import org.lemanoman.testeweb.model.SerieModel;
 import org.lemanoman.testeweb.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,23 +41,9 @@ public class SeriesController {
     	public SerieService service;
     
 	@RequestMapping("/listarSeries")
-	public List<SerieSource> listarSeries() {
-	    	return service.listarSeries();
-	    	/**
-		List<SerieSource> lista = new ArrayList<SerieSource>();
-		SerieSource bigbang = new SerieSource("Big Bang Theory","F:\\Series\\BigBang", ".*(S[0-9]{2}E[0-9]{2}).*");
-		SerieSource fearoftwd = new SerieSource("Fear of the Walking Dead","F:\\Series\\FearOFWalkingDead", ".*([0-9]{2}).mp4");
-		SerieSource naruto = new SerieSource("Naruto","F:\\Series\\Naruto", ".*([0-9]{3}).mp4");
-		SerieSource onepiece = new SerieSource("One Piece","F:\\Series\\OnePiece", ".*([0-9]{3}).mp4");
-
-		lista.add(bigbang);
-		lista.add(naruto);
-		lista.add(onepiece);
-		lista.add(fearoftwd);
-		
-		return lista;
-		**/
-	    
+	public List<SerieModel> listarSeries() {
+	    service.updateCatalogo();
+	    return service.listarSeries();
 	}
 
 }
