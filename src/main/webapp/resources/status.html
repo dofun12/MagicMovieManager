@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="customersCtrl">
+	<div ng-if="isRunning"> 
+		{{jsonData.file}}
+		{{jsonData.filepatharg}}
+		{{jsonData.positionstring}}
+		{{lastPos}}
+		{{jsonData.duration}}
+		{{totalPlayed}}
+	</div>
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('customersCtrl', function($scope, $http,$interval) {
+	var delay = 3000;
+	var increment = 1000;
+	$scope.isRunning = false;
+	
+	$scope.lastPos = 0;
+	$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
+		$scope.jsonData = response;
+		$scope.totalPlayed = 0;
+		
+		console.log(response);
+		$interval(function() {
+			$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
+				console.log("LOOP",response);
+				if(response.statusType=="RUNNING"){
+					console.log("LOOP",response);
+					$scope.jsonData = response;
+					$scope.isRunning = true;
+					//if(response.position>$scope.lastPos){
+						$scope.lastPos = (Number(response.position)+1);						
+					//}
+					
+					$scope.totalPlayed = Number(($scope.lastPos/$scope.jsonData.duration)*100).toFixed(1);
+				}else{
+					$scope.isRunning = false;
+				}
+			});
+			
+		}, delay);
+		
+		$interval(function() {
+			if($scope.isRunning){
+				//$scope.lastPos += 24006;
+				$scope.lastPos += increment;
+				$scope.totalPlayed = Number(($scope.lastPos/$scope.jsonData.duration)*100).toFixed(1);
+			}	
+		}, increment); 
+	});
+	
+	
+	
+	
+});
+</script>
+
+</body>
+</html>
