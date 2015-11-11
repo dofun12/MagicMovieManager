@@ -19,11 +19,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.GreetingModel;
 import org.lemanoman.testeweb.model.MPHCResponseModel;
 import org.lemanoman.testeweb.model.MPHCStatusType;
 import org.lemanoman.testeweb.model.MediaFileModel;
 import org.lemanoman.testeweb.model.SerieSource;
+import org.lemanoman.testeweb.service.SerieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,9 +36,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
 public class SeriesController {
-
+    
+    	@Autowired
+    	public SerieService service;
+    
 	@RequestMapping("/listarSeries")
 	public List<SerieSource> listarSeries() {
+	    	return service.listarSeries();
+	    	/**
 		List<SerieSource> lista = new ArrayList<SerieSource>();
 		SerieSource bigbang = new SerieSource("Big Bang Theory","F:\\Series\\BigBang", ".*(S[0-9]{2}E[0-9]{2}).*");
 		SerieSource fearoftwd = new SerieSource("Fear of the Walking Dead","F:\\Series\\FearOFWalkingDead", ".*([0-9]{2}).mp4");
@@ -48,6 +56,8 @@ public class SeriesController {
 		lista.add(fearoftwd);
 		
 		return lista;
+		**/
+	    
 	}
 
 }

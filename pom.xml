@@ -33,6 +33,39 @@
 			<artifactId>spring-web</artifactId>
 			<version>4.1.7.RELEASE</version>
 		</dependency>
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-jdbc</artifactId>
+	        <version>4.1.7.RELEASE</version>
+	    </dependency>
+	    
+	    <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+             <version>4.1.7.RELEASE</version>
+        </dependency>
+
+		<!-- JSTL --> 
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+	    
+		<!-- MySQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.9</version>
+		</dependency>
+		
+		<!-- C3P0 Connection Pool -->
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>javax.servlet</groupId>

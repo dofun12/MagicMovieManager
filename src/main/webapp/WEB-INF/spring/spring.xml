@@ -13,9 +13,13 @@
 	<context:component-scan base-package="org.lemanoman.testeweb.configuration" />
 	<context:component-scan base-package="org.lemanoman.testeweb.controller" />
 	<context:component-scan base-package="org.lemanoman.testeweb.restcontroller" />
+	<context:component-scan base-package="org.lemanoman.testeweb.dao" />
+	<context:component-scan base-package="org.lemanoman.testeweb.service" />
 	
 	<!-- SpringMVC -->
 	<import resource="spring-mvc.xml" />
  
+	<!-- SpringJDBC -->
+	<import resource="spring-jdbc.xml" />
 	
 </beans>

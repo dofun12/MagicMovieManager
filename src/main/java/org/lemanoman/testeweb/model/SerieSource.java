@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SerieSource {
+    	private Integer id;
 	private String title;
 	private List<MediaFileModel> files = new ArrayList<MediaFileModel>();
 	
@@ -50,6 +51,14 @@ public class SerieSource {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Integer getId() {
+	    return id;
+	}
+
+	public void setId(Integer id) {
+	    this.id = id;
 	}
 	
 	
