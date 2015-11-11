@@ -44,10 +44,10 @@
 		
 		<script>
 			var app = angular.module('myApp', []);
-			app.controller('seriesCtrl', function($scope, $http,$interval) {
+			app.controller('seriesCtrl', function($scope, $http,$interval,$browser) {
 				$scope.isSerieSelecionada = false;
 				
-				$http.get('/TesteWebaMaven/listarSeries').success(function(response) {
+				$http.get($browser.url()+'/listarSeries').success(function(response) {
 					$scope.seriesList = response;
 				});	
 				
@@ -60,7 +60,7 @@
 				
 				$scope.play = function(episodio){
 					console.log(episodio);
-					$http.post('/TesteWebaMaven/play',episodio).success(function(response) {
+					$http.post($browser.url()+'/play',episodio).success(function(response) {
 						$scope.playSession(episodio);
 					});	
 				};
@@ -72,13 +72,13 @@
 					$scope.isRunning = false;
 					
 					$scope.lastPos = 0;
-					$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
+					$http.get($browser.url()+'/statusMPHC').success(function(response) {
 						$scope.jsonData = response;
 						$scope.totalPlayed = 0;
 						
 						console.log(response);
 						$interval(function() {
-							$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
+							$http.get($browser.url()+'/statusMPHC').success(function(response) {
 								console.log("LOOP",response);
 								if(response.statusType=="RUNNING"){
 									$scope.jsonData = response;
@@ -90,7 +90,7 @@
 										status:response
 									};
 									
-									$http.post('/TesteWebaMaven/saveHistory',objects,{}).success(function(response) {
+									$http.post($browser.url()+'/saveHistory',objects,{}).success(function(response) {
 									});
 								}else{
 									$scope.isRunning = false;
@@ -104,7 +104,7 @@
 								$scope.lastPos += increment;
 								$scope.totalPlayed = Number(($scope.lastPos/$scope.jsonData.duration)*100).toFixed(1);
 								if($scope.totalPlayed>=100){
-									$http.get('/TesteWebaMaven/statusMPHC').success(function(response) {
+									$http.get($browser.url()+'/statusMPHC').success(function(response) {
 										if(response.statusType=="RUNNING"){
 											console.log("LOOP 2",response);
 											$scope.isRunning = true;

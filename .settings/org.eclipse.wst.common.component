@@ -5,7 +5,7 @@
         <wb-resource deploy-path="/" source-path="/webresources"/>
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <property name="context-root" value="TesteWebaMaven"/>
         <property name="java-output-path" value="/TesteWebaMaven/target/classes"/>
+        <property name="context-root" value="MVM"/>
     </wb-module>
 </project-modules>
