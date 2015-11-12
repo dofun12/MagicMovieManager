@@ -42,7 +42,7 @@ public class MovieSessionController {
 		if(media!=null){
 			System.out.println(media.getFile().getAbsolutePath());
 			try {
-				Runtime.getRuntime().exec("C:\\Program Files\\MPC-HC\\mpc-hc64.exe /play "+media.getFile().getAbsolutePath());
+				Runtime.getRuntime().exec("C:\\Program Files\\MPC-HC\\mpc-hc64.exe /fullscreen /play "+media.getFile().getAbsolutePath());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
