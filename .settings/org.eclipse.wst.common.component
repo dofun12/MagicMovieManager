@@ -6,6 +6,6 @@
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <property name="java-output-path" value="/TesteWebaMaven/target/classes"/>
-        <property name="context-root" value="MVM"/>
+        <property name="context-root" value="MagicMovieManager"/>
     </wb-module>
 </project-modules>

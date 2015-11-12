@@ -19,8 +19,8 @@
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<!-- <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/portalgestaooi" /> -->
 		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/magicmoviemanager" />
-		<property name="user" value="flexvision" />
-		<property name="password" value="f1l2e3x4" /> 
+		<property name="user" value="root" />
+		<property name="password" value="root" /> 
 		<property name="maxPoolSize" value="50" />
 		<property name="minPoolSize" value="10" />
 		<property name="maxStatements" value="100" />

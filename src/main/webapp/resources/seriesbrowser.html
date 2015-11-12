@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-	<head ng-app="MainModule">
+<html  ng-app="MainModule">
+	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,28 +14,14 @@
 		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 		
 		<script src="js/geral/main-module.js"></script>
-		<script src="js/geral/main-controller.js"></script>
-		<script src="js/geral/main-service.js"></script>
+		<script src="js/pages/seriesbrowser/seriesbrowser-controller.js"></script>
+		<script src="js/pages/seriesbrowser/seriesbrowser-service.js"></script>
 		
-		<script src="js/pages/home/home-controller.js"></script>
-		<script src="js/pages/home/home-service.js"></script>
 	</head>	
 	
 	<body>
 	
-		<div ng-controller="HomeController">
-			<div ng-show="isRunning"> 
-				{{jsonData.file}}
-				{{jsonData.filepatharg}}
-				{{jsonData.positionstring}}
-				{{lastPos}}
-				{{jsonData.duration}}
-				<div class="progress">
-				  <div class="progress-bar" role="progressbar" aria-valuenow="{{totalPlayed}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{totalPlayed}}%;">
-				    {{totalPlayed}}
-				  </div>
-				</div>
-			</div>
+		<div ng-controller="SeriesBrowserController">
 			<div class="row">
 				<div class="col-lg-6  col-sm-12">
 					<div ng-repeat="serie in seriesList"> 
@@ -49,10 +35,11 @@
 						</div>
 					</div>
 				</div>
+				<a href="../index.html">
+					<button class="btn btn-default" style="width:100%;padding:10px;">Voltar</button>
+				</a>	
 			</div>	
-			<a href="../index.html">
-				<button class="btn btn-default" style="width:100%;padding:10px;">Voltar</button>
-			</a>
+			
 		</div>
 	</body>
 </html>
