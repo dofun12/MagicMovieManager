@@ -3,6 +3,10 @@ package org.lemanoman.testeweb.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.SerieFileMapper;
 import org.lemanoman.testeweb.model.SerieFileModel;
@@ -16,16 +20,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieModel>implements JdbcSerieDAO {
 
+    @PersistenceContext
+    protected EntityManager em;
+    
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonConverter;
 
     public List<SerieModel> listarSeriesOffline() {
-	StringBuilder query = new StringBuilder();
-	query.append("SELECT * from serie");
-	return this.getNamedParameterJdbcTemplate().query(query.toString(), new SerieMapper());
+	Query q = em.createQuery("SELECT s from SerieModel");
+	System.out.println(q);
+	return q.getResultList();
     }
 
     public void updateCatalogo() {
+	Query q = em.createQuery("SELECT s from SerieModel");
+	System.out.println(q);
+	System.out.println("asdsadsadasdadsa");
 	for (SerieModel source : listarSeriesOffline()) {
 	    for (SerieFileModel sf : source.getFiles()) {
 		SerieFileModel model = getSerieFileModel(source.getId(), sf.getEpisodio());

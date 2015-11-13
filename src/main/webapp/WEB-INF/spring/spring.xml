@@ -20,6 +20,7 @@
 	<import resource="spring-mvc.xml" />
  
 	<!-- SpringJDBC -->
-	<import resource="spring-jdbc.xml" />
+	<import resource="spring-sqllite.xml" />
+	<!-- <import resource="spring-mysql.xml" />  -->
 	
 </beans>

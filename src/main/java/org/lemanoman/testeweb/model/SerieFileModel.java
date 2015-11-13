@@ -2,9 +2,22 @@ package org.lemanoman.testeweb.model;
 
 import java.io.File;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="serie_file")
 public class SerieFileModel {
+    	@Column
 	private String episodio;
+    	
+    	@Column
 	private File file;
+    	
+    	@Id
 	private Integer idSerie;
 	
 	public String getEpisodio() {
