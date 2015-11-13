@@ -30,7 +30,7 @@ public class SerieModel {
     	@Column
 	private String path;
     	
-    	@OneToMany(fetch = FetchType.LAZY, mappedBy = "idSerie")
+    	@OneToMany(fetch = FetchType.LAZY)
 	private List<SerieFileModel> files = new ArrayList<SerieFileModel>();
 	
 	public SerieModel() {
