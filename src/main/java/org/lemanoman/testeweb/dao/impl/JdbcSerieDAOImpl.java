@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -27,14 +28,14 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieModel>implements Jdbc
     private MappingJackson2HttpMessageConverter jacksonConverter;
 
     public List<SerieModel> listarSeriesOffline() {
-	Query q = em.createQuery("SELECT s from SerieModel");
+	Query q = em.createQuery("from SerieModel s");
 	System.out.println(q);
 	return q.getResultList();
     }
 
     public void updateCatalogo() {
-	Query q = em.createQuery("SELECT s from SerieModel");
-	System.out.println(q);
+	em.createQuery("from SerieModel s").getSingleResult();
+	
 	System.out.println("asdsadsadasdadsa");
 	for (SerieModel source : listarSeriesOffline()) {
 	    for (SerieFileModel sf : source.getFiles()) {
