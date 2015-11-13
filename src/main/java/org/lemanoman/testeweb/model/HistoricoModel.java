@@ -16,13 +16,13 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="historico")
-public class HistoryModel {
+public class HistoricoModel {
     	@Id
     	@GeneratedValue
     	private Integer codigo;
 
-    	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
-	private SerieFileModel serieFile;
+    	@Column
+    	private Integer idSerieFile;
     	
     	@Transient
 	private MPHCResponseModel status;
@@ -32,43 +32,44 @@ public class HistoryModel {
     	
     	@Column
 	private Double percentWatched;
-	
-	public SerieFileModel getMedia() {
-		return serieFile;
-	}
-	public void setMedia(SerieFileModel media) {
-		this.serieFile = media;
-	}
-	public MPHCResponseModel getStatus() {
-		return status;
-	}
-	public void setStatus(MPHCResponseModel status) {
-		this.status = status;
-	}
-	public Date getLastTimeWatched() {
-		return lastTimeWatched;
-	}
-	public void setLastTimeWatched(Date lastTimeWatched) {
-		this.lastTimeWatched = lastTimeWatched;
-	}
+
 	public Integer getCodigo() {
 	    return codigo;
 	}
+
 	public void setCodigo(Integer codigo) {
 	    this.codigo = codigo;
 	}
-	public SerieFileModel getSerieFile() {
-	    return serieFile;
+
+	public Integer getIdSerieFile() {
+	    return idSerieFile;
 	}
-	public void setSerieFile(SerieFileModel serieFile) {
-	    this.serieFile = serieFile;
+
+	public void setIdSerieFile(Integer idSerieFile) {
+	    this.idSerieFile = idSerieFile;
 	}
+
+	public MPHCResponseModel getStatus() {
+	    return status;
+	}
+
+	public void setStatus(MPHCResponseModel status) {
+	    this.status = status;
+	}
+
+	public Date getLastTimeWatched() {
+	    return lastTimeWatched;
+	}
+
+	public void setLastTimeWatched(Date lastTimeWatched) {
+	    this.lastTimeWatched = lastTimeWatched;
+	}
+
 	public Double getPercentWatched() {
 	    return percentWatched;
 	}
+
 	public void setPercentWatched(Double percentWatched) {
 	    this.percentWatched = percentWatched;
 	}
-	
-	
 }
