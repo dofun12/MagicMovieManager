@@ -6,13 +6,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="serie")
@@ -28,9 +32,9 @@ public class SerieModel {
 	private String regex;
     	
     	@Column
-	private String path;
+	private String filepath;
     	
-    	@OneToMany(fetch = FetchType.LAZY)
+    	@Transient
 	private List<SerieFileModel> files = new ArrayList<SerieFileModel>();
 	
 	public SerieModel() {
@@ -46,7 +50,13 @@ public class SerieModel {
 			String epName = getVarEpisodio(name, regex);
 			
 			SerieFileModel mediaFile = new SerieFileModel();
-			mediaFile.setEpisodio(epName);
+			
+			SerieFilePK pk = new SerieFilePK();
+			pk.setEpisodio(epName);
+			pk.setIdSerie(id);
+			
+			mediaFile.setPk(pk);
+			mediaFile.setFilePath(file.getAbsolutePath());
 			mediaFile.setFile(media);
 			
 			files.add(mediaFile);
@@ -63,6 +73,7 @@ public class SerieModel {
 		return null;
 	}
 
+	
 	public List<SerieFileModel> getFiles() {
 		return files;
 	}
@@ -95,13 +106,14 @@ public class SerieModel {
 	    this.regex = regex;
 	}
 
-	public String getPath() {
-	    return path;
+	public String getFilepath() {
+	    return filepath;
 	}
 
-	public void setPath(String path) {
-	    this.path = path;
+	public void setFilepath(String filepath) {
+	    this.filepath = filepath;
 	}
+	
 	
 	
 }

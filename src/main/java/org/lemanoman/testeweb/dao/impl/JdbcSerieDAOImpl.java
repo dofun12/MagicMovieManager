@@ -1,8 +1,12 @@
 package org.lemanoman.testeweb.dao.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.naming.spi.DirStateFactory.Result;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
@@ -11,6 +15,7 @@ import javax.persistence.Query;
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.SerieFileMapper;
 import org.lemanoman.testeweb.model.SerieFileModel;
+import org.lemanoman.testeweb.model.SerieFilePK;
 import org.lemanoman.testeweb.model.SerieModel;
 import org.lemanoman.testeweb.model.SerieMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,98 +28,95 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieModel>implements Jdbc
 
     @PersistenceContext
     protected EntityManager em;
-    
+
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonConverter;
 
     public List<SerieModel> listarSeriesOffline() {
-	Query q = em.createQuery("from SerieModel s");
-	System.out.println(q);
-	return q.getResultList();
+	SerieModel serieModel = new SerieModel();
+	serieModel.setName("Teste");
+	serieModel.setRegex(".*([0-9]{2}).mpeg");
+	serieModel.setFilepath("/home/kevim/series/teste-serie");
+
+	List<SerieModel> series = em.createQuery("from SerieModel s", SerieModel.class).getResultList();
+
+	if (series == null) {
+	    em.persist(serieModel);
+	}else if( series.size()== 0 ){
+	    em.persist(serieModel);
+	}
+
+	return em.createQuery("from SerieModel s", SerieModel.class).getResultList();
     }
 
     public void updateCatalogo() {
-	em.createQuery("from SerieModel s").getSingleResult();
-	
-	System.out.println("asdsadsadasdadsa");
-	for (SerieModel source : listarSeriesOffline()) {
-	    for (SerieFileModel sf : source.getFiles()) {
-		SerieFileModel model = getSerieFileModel(source.getId(), sf.getEpisodio());
+	List<SerieModel> sources = listarSeriesOffline(); 
+	for (SerieModel source : sources) {
+	    Integer id = source.getId();
+	    File file = new File(source.getFilepath());
+	    for (File media : file.listFiles()) {
+		String name = media.getName();
 
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("episodio", sf.getEpisodio());
-		params.addValue("file", sf.getFile().getAbsolutePath());
-		params.addValue("id_serie", source.getId());
-		if (model == null) {
-		    StringBuilder query = new StringBuilder();
-		    query.append("INSERT INTO serie_file (  ");
-		    query.append("  episodio, ");
-		    query.append("  file, ");
-		    query.append("  id_serie ");
-		    query.append(" ) VALUES ( ");
-		    query.append("  :episodio, ");
-		    query.append("  :file, ");
-		    query.append("  :id_serie ");
-		    query.append(")");
+		String epName = getVarEpisodio(name, source.getRegex());
 
-		    this.getNamedParameterJdbcTemplate().update(query.toString(), params);
-		} else if(!model.getFile().getAbsolutePath().equals(sf.getFile().getAbsolutePath())){
-		    StringBuilder query = new StringBuilder();
-		    query.append("UPDATE ");
-		    query.append(" serie_file ");
-		    query.append(" SET ");
-		    query.append(" file=:file ");
-		    query.append(" WHERE episodio = :episodio ");
-		    query.append(" AND id_serie = :id_serie ");
-		    query.append(")");
-
-		    this.getNamedParameterJdbcTemplate().update(query.toString(), params);
+		SerieFileModel mediaFile = getSerieFileModel(id, epName);
+		
+		if(mediaFile==null){
+		    mediaFile = new SerieFileModel();
 		}
+		System.out.println(id);
+		
+		SerieFilePK pk = new SerieFilePK();
+		pk.setEpisodio(epName);
+		pk.setIdSerie(id);
+		
+		mediaFile.setPk(pk);
+		mediaFile.setFile(media);
+		mediaFile.setFilePath(mediaFile.getFile().getAbsolutePath());
+		em.persist(mediaFile);
 	    }
 	}
+	em.flush();
+    }
+
+    private String getVarEpisodio(String name, String regex) {
+	Pattern pattern = Pattern.compile(regex);
+	Matcher matcher = pattern.matcher(name);
+	if (matcher.matches()) {
+	    String episodio = matcher.group(1);
+	    return episodio;
+	}
+	return null;
     }
 
     public SerieFileModel getSerieFileModel(Integer idSerie, String episodio) {
-	StringBuilder query = new StringBuilder();
-	query.append("SELECT * from serie_file where id_serie = :idserie and episodio= :episodio");
-
-	MapSqlParameterSource params = new MapSqlParameterSource();
-	params.addValue("idserie", idSerie);
-	params.addValue("episodio", episodio);
-
-	List<SerieFileModel> files = this.getNamedParameterJdbcTemplate().query(query.toString(), params,
-		new SerieFileMapper());
-	if (files != null && files.size() > 0) {
-	    return files.get(0);
-	} else {
-	    return null;
-	}
+	SerieFilePK pk = new SerieFilePK();
+	pk.setEpisodio(episodio);
+	pk.setIdSerie(idSerie);
+	return em.find(SerieFileModel.class, pk);
     }
 
     public List<SerieModel> listarSeries() {
-	List<SerieModel> list = new ArrayList<SerieModel>();
-
-	StringBuilder query = new StringBuilder();
-	query.append("SELECT * from serie");
-
-	List<SerieModel> seriesTmp = this.getNamedParameterJdbcTemplate().query(query.toString(), new SerieMapper());
-	if (seriesTmp != null) {
-	    for (SerieModel s : seriesTmp) {
-		List<SerieFileModel> serieFileModels = listarSeriesFiles(s.getId());
-		s.setFiles(serieFileModels);
-		list.add(s);
+	List<SerieModel> tmp =  new ArrayList<SerieModel>();
+	List<SerieModel> series =  em.createQuery("from SerieModel s", SerieModel.class).getResultList();
+	if(series!=null){
+	    for(SerieModel s:series){
+		s.setFiles(listarSeriesFiles(s.getId()));
+		tmp.add(s);
 	    }
 	}
-	return list;
+	return tmp;
     }
 
+    
+    
     public List<SerieFileModel> listarSeriesFiles(Integer idSerie) {
-	StringBuilder query = new StringBuilder();
-	query.append("SELECT * from serie_file where id_serie = :idserie order by episodio");
-
-	MapSqlParameterSource params = new MapSqlParameterSource();
-	params.addValue("idserie", idSerie);
-	return this.getNamedParameterJdbcTemplate().query(query.toString(), params, new SerieFileMapper());
+	@SuppressWarnings("unchecked")
+	List<SerieFileModel> sfm = (List<SerieFileModel>) em.createQuery(
+		   "SELECT c FROM SerieFileModel c WHERE c.pk.idSerie = :serieId ")
+		   .setParameter("serieId", idSerie)
+		   .getResultList();
+	 return sfm;
     }
 
 }

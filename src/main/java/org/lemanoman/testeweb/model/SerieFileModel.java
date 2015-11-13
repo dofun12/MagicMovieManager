@@ -3,41 +3,51 @@ package org.lemanoman.testeweb.model;
 import java.io.File;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="serie_file")
 public class SerieFileModel {
-    	@Column
-	private String episodio;
+    	@EmbeddedId
+    	private SerieFilePK pk;
     	
-    	@Column
+    	@Transient
 	private File file;
     	
-    	@Id
-	private Integer idSerie;
-	
-	public String getEpisodio() {
-		return episodio;
+    	@Column
+	private String filePath;
+
+	public SerieFilePK getPk() {
+	    return pk;
 	}
-	public void setEpisodio(String episodio) {
-		this.episodio = episodio;
+
+	public void setPk(SerieFilePK pk) {
+	    this.pk = pk;
 	}
+
 	public File getFile() {
-		return file;
+	    return file;
 	}
+
 	public void setFile(File file) {
-		this.file = file;
+	    this.file = file;
 	}
-	public Integer getIdSerie() {
-	    return idSerie;
+
+	public String getFilePath() {
+	    return filePath;
 	}
-	public void setIdSerie(Integer idSerie) {
-	    this.idSerie = idSerie;
+
+	public void setFilePath(String filePath) {
+	    this.filePath = filePath;
 	}
+	
+	
 	
 	
 }
