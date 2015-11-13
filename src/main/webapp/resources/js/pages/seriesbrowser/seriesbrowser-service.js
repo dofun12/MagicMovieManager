@@ -10,4 +10,13 @@ angular.module('MainModule')
 		return $http.get( this.baseUrl + '/listarSeries');
 	};
 	
+	this.play = function(episodio) {
+		return $http.post( this.baseUrl + '/play', episodio);
+	};
+	
+	this.getStatusMPHC = function(){
+		return $http.get( this.baseUrl + '/statusMPHC');
+	};
+	
+	
 });

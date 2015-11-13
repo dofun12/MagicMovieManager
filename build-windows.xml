@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MagicMovieManager" default="deploy" basedir=".">
+	
+	<property name="maven.project.war.name" value="MagicMovieManager" />
+	<property name="output" value="target/${maven.project.war.name}" />
+	<property environment="env"/>
+	<property name="maven_home" value="C:/apache-maven-3.3.3" />
+	<property name="catalina_home" value="C:/Users/KevimDesktop/Documents/ApacheTomcat/apache-tomcat-8.0.28-windows-x64/apache-tomcat-8.0.28/" />
+	
+	
+	<property name="tomcatContextXML" value="${catalina_home}/conf/Catalina/localhost/${maven.project.war.name}.xml" />
+	
+	<target name="deploy">
+		<copy preservelastmodified="true" verbose="true" todir="${output}">
+			<fileset dir="src/main/webapp" />
+		</copy>
+		<copy preservelastmodified="true" todir="${output}/WEB-INF/classes">
+			<fileset dir="target/classes" />
+		</copy>
+		<copy preservelastmodified="false" todir="${output}/WEB-INF/classes">
+			<fileset dir="src/main/webapp/resources/" />
+		</copy>
+	</target>
+	
+	<target name="undeploy">
+		<delete file="${tomcatContextXML}" /> 
+	</target>
+	
+	<target name="build" depends="clean,compile,package" >
+		<touch file="${tomcatContextXML}" />
+		<echo file="${tomcatContextXML}">&lt;Context docBase="${basedir}/target/${maven.project.war.name}" path="${maven.project.war.name}"  reloadable="true" /&gt;</echo>
+	</target>
+	<target name="buildAndDeploy" depends="build,deploy" >
+	</target>
+	
+	<target name="compile">
+		<exec executable="${maven_home}/bin/mvn.cmd">
+			<arg value="compile" />
+		</exec>
+	</target>
+	<target name="clean">
+		<delete dir="${output}" />
+		<exec executable="${maven_home}/bin/mvn.cmd">
+			<arg value="clean" />
+		</exec>
+	</target>
+	<target name="package">
+		<exec executable="${maven_home}/bin/mvn.cmd">
+			<arg value="package" />
+		</exec>
+	</target>
+</project>
