@@ -12,4 +12,6 @@ public interface SerieService {
     public List<SerieModel> listarSeries();
     public void updateCatalogo();
     public List<SerieModel> listarSeriesOffline();
+    
+    
 }

@@ -18,13 +18,16 @@ public class SerieFileMapper implements ResultSetExtractor<List<SerieFileModel>>
 	if (rs != null) {
 	    while (rs.next()) {
 		String episodio = rs.getString("episodio");
-		String path = rs.getString("file");
-		Integer idSerie = rs.getInt("id_serie");
+		String path = rs.getString("filePath");
+		Integer idSerie = rs.getInt("idSerie");
 		
 		SerieFileModel serieFileModel = new SerieFileModel();
-		serieFileModel.setEpisodio(episodio);
+		SerieFilePK pk = new SerieFilePK();
+		pk.setEpisodio(episodio);
+		pk.setIdSerie(idSerie);
+		
+		serieFileModel.setPk(pk);
 		serieFileModel.setFile(new File(path));
-		serieFileModel.setIdSerie(idSerie);
 		
 		series.add(serieFileModel);
 	    }

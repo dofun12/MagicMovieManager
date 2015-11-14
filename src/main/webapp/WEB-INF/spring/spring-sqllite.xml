@@ -15,21 +15,24 @@
 						http://www.springframework.org/schema/jee/spring-jee.xsd">
 						
 	<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager" />
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<!-- <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/portalgestaooi" /> -->
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/magicmoviemanager" />
-		<property name="user" value="root" />
-		<property name="password" value="root" /> 
-		<property name="maxPoolSize" value="50" />
-		<property name="minPoolSize" value="10" />
-		<property name="maxStatements" value="100" />
-		<property name="testConnectionOnCheckout" value="true" />
-	</bean>
-	<!-- <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/portalgisDS"/> -->
+	<!-- DataSource -->
+    
+    <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource" >
+        <property name="driverClassName" value="org.sqlite.JDBC"/>
+        <property name="url" value="jdbc:sqlite:moviemanager.db" /> 
+        <property name="initialSize" value="2" />
+        <property name="maxActive" value="20" />
+        <property name="maxIdle" value="5" />
+        <property name="poolPreparedStatements" value="true" />
+    </bean>
 	
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
+        <property name="persistenceUnitName" value="persistenceUnitSQLite"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 </beans>
 
