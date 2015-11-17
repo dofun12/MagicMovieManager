@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="MainModule">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="js/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="js/lib/angularjs/angular.min.js"></script>
+
+<script src="js/lib/jquery/jquery-1.11.3.min.js"></script>
+
+<script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
+
+<script src="js/geral/main-module.js"></script>
+<script src="js/pages/cadastroSerie/cadastroSerie-controller.js"></script>
+<script src="js/pages/cadastroSerie/cadastroSerie-service.js"></script>
+<link rel="stylesheet" type="text/css" href="css/default.css"></link>
+
+</head>
+
+<body>
+	<div ng-controller="CadastroSerieController">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div ng-show="!isSerieSelecionada">
+					<span>Cadastro de Series</span>
+					<a href="index.html">
+						<button class="btn btn-default botaoVoltar">
+							<span class="glyphicon glyphicon-chevron-left"></span>
+						</button>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">Nome da Serie</span>
+		  <input type="text" class="form-control" ng-model="serieName" placeholder="ex: Big Bang Theory " aria-describedby="basic-addon1">
+		</div>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">Regex</span>
+		  <input type="text" class="form-control" ng-model="serieRegex" placeholder="ex: '.*([0-9]{2}).mpeg'" aria-describedby="basic-addon2">
+		</div>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">File Path</span>
+		  <input type="text" class="form-control" ng-model="seriePath" placeholder="/home/kevim/teste" aria-describedby="basic-addon3">
+		</div>
+		<button ng-click="testarRegex()">TEste REgex</button>Total encontrados : {{totalEncontrados}}
+	</div>
+</body>
+
+</html>

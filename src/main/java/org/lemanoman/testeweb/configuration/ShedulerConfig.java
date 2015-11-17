@@ -19,7 +19,7 @@ public class ShedulerConfig {
     
     @Scheduled(fixedDelay=3000)
     public void doSomething() {
-	MPHCResponseModel status = controller.getStatus();
-	System.out.println("OK: "+status.getState());
+	//MPHCResponseModel status = controller.getStatus();
+	//System.out.println("OK: "+status.getState());
     }
 }

@@ -1,0 +1,8 @@
+.botaoVoltar{
+	float: right;
+   	position: relative;
+   	top: -8px;
+}
+.serieItem{
+	margin-bottom:10px;
+}
