@@ -17,4 +17,5 @@ public interface JdbcSerieDAO{
 	public void updateCatalogo();
 	public SerieFileModel getSerieFileModel(Integer idSerie, String episodio);
 	public List<SerieModel> listarSeries();
+	public void adicionarSerie(String nome,String regex,String filepath);
 }

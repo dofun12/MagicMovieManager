@@ -27,6 +27,7 @@ import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieModel;
 import org.lemanoman.testeweb.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +45,14 @@ public class SeriesController {
 	public List<SerieModel> listarSeries() {
 	    service.updateCatalogo();
 	    return service.listarSeries();
+	}
+	
+	
+	@RequestMapping("/adicionarSerie")
+	public void listarSeries(@RequestBody SerieModel serie) {
+	    if(serie!=null){
+		service.adicionarSerie(serie.getName(), serie.getRegex(), serie.getFilepath());
+	    }
 	}
 
 }

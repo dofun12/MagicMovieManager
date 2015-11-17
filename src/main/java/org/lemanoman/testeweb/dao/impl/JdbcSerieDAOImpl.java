@@ -48,6 +48,14 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieModel>implements Jdbc
 
 	return em.createQuery("from SerieModel s", SerieModel.class).getResultList();
     }
+    
+    public void adicionarSerie(String nome,String regex,String filepath){
+	SerieModel serie = new SerieModel();
+	serie.setName(nome);
+	serie.setFilepath(filepath);
+	serie.setRegex(regex);
+	em.persist(serie);
+    }
 
     public void updateCatalogo() {
 	List<SerieModel> sources = listarSeriesOffline(); 

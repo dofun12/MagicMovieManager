@@ -12,6 +12,6 @@ public interface SerieService {
     public List<SerieModel> listarSeries();
     public void updateCatalogo();
     public List<SerieModel> listarSeriesOffline();
-    
+    public void adicionarSerie(String nome,String regex,String filepath);
     
 }

@@ -15,6 +15,10 @@ public class SerieServiceImpl implements SerieService{
     @Autowired
     private JdbcSerieDAO dao;
 
+    public void adicionarSerie(String nome,String regex,String filepath){
+	dao.adicionarSerie(nome, regex, filepath);
+    }
+    
     @Override
     public List<SerieModel> listarSeriesOffline() {
 	return dao.listarSeriesOffline();
