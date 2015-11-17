@@ -246,7 +246,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<warSourceDirectory>src/main/webapp/resources</warSourceDirectory>
+					<warSourceDirectory>src/main/webapp/</warSourceDirectory>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
