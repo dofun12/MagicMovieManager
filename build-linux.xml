@@ -13,9 +13,6 @@
 		<copy preservelastmodified="true" todir="${output}/WEB-INF/classes">
 			<fileset dir="target/classes" />
 		</copy>
-		<copy preservelastmodified="false" todir="${output}/WEB-INF/classes">
-			<fileset dir="src/main/webapp/resources/" />
-		</copy>
 	</target>
 	
 	<target name="undeploy">
