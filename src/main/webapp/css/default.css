@@ -6,3 +6,18 @@
 .serieItem{
 	margin-bottom:10px;
 }
+.lastWatched{
+	color:red;
+	background-color: red !important;
+}
+.botaoPlay{
+	margin:0 auto;
+	display:block;
+	width:80%;
+}
+.botaoPlayLastWatched{
+	margin:0 auto;
+	display:block;
+	width:80%;
+	background-color: green;
+}

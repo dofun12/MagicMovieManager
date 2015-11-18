@@ -5,6 +5,7 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>org.lemanoman.testeweb.model.HistoricoModel</class>
         <class>org.lemanoman.testeweb.model.SerieFilePK</class>
+        <class>org.lemanoman.testeweb.model.HistoricoPK</class>
         <class>org.lemanoman.testeweb.model.SerieFileModel</class>
         <class>org.lemanoman.testeweb.model.SerieModel</class>
         <properties>

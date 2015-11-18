@@ -20,6 +20,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.lemanoman.testeweb.model.GreetingModel;
+import org.lemanoman.testeweb.model.MPHCPlayModel;
 import org.lemanoman.testeweb.model.MPHCResponseModel;
 import org.lemanoman.testeweb.model.MPHCStatusType;
 import org.lemanoman.testeweb.model.SerieFileModel;
@@ -38,11 +39,23 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class MovieSessionController {
 
 	@RequestMapping(value = "/play", method = RequestMethod.POST)
-	public void playMovie(@RequestBody SerieFileModel media) {
+	public void playMovie(@RequestBody MPHCPlayModel media) {
 		if(media!=null){
-			System.out.println(media.getFile().getAbsolutePath());
 			try {
-				Runtime.getRuntime().exec("C:\\Program Files\\MPC-HC\\mpc-hc64.exe /fullscreen /play "+media.getFile().getAbsolutePath());
+				StringBuilder command = new StringBuilder();
+				command.append("C:\\Program Files\\MPC-HC\\mpc-hc64.exe ");
+				if(media.isFullscreen()){
+					command.append("/fullscreen ");
+				}
+				if(media.getPosition()!=null){
+					command.append("/startpos "+media.getPosition()+" ");
+				}else{
+					command.append("/play ");
+				}
+				command.append(media.getSerie().getFilePath());
+				String commandStr = command.toString();
+				System.out.println(commandStr);
+				Runtime.getRuntime().exec(commandStr);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

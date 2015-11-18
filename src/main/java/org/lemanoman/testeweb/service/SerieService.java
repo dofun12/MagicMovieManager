@@ -3,6 +3,9 @@ package org.lemanoman.testeweb.service;
 import java.util.List;
 
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
+import org.lemanoman.testeweb.model.HistoricoModel;
+import org.lemanoman.testeweb.model.HistoricoPK;
+import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,5 +16,9 @@ public interface SerieService {
     public void updateCatalogo();
     public List<SerieModel> listarSeriesOffline();
     public void adicionarSerie(String nome,String regex,String filepath);
+    public void salvarHistorico(HistoricoModel model);
+    public List<SerieFileModel> listarSeriesByPath(String path);
+    public HistoricoModel getHistoricoModel(HistoricoPK pk);
+	public HistoricoModel getUltimaSerieAssistida(Integer idSerie);
     
 }

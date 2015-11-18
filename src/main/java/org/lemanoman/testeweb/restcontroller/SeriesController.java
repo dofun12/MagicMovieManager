@@ -24,6 +24,8 @@ import org.jsoup.nodes.Element;
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.FileModel;
 import org.lemanoman.testeweb.model.GreetingModel;
+import org.lemanoman.testeweb.model.HistoricoModel;
+import org.lemanoman.testeweb.model.HistoricoPK;
 import org.lemanoman.testeweb.model.MPHCResponseModel;
 import org.lemanoman.testeweb.model.MPHCStatusType;
 import org.lemanoman.testeweb.model.SerieFileModel;
@@ -41,48 +43,60 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
 public class SeriesController {
-    
-    	@Autowired
-    	public SerieService service;
-    
-	@RequestMapping(value = "/listarSeries",method = RequestMethod.GET)
+
+	@Autowired
+	public SerieService service;
+
+	@RequestMapping(value = "/listarSeries", method = RequestMethod.GET)
 	public List<SerieModel> listarSeries() {
-	    service.updateCatalogo();
-	    return service.listarSeries();
+		service.updateCatalogo();
+		return service.listarSeries();
 	}
-	
-	@RequestMapping(value = "/testarRegex",method = RequestMethod.POST)
+
+	@RequestMapping(value = "/testarRegex", method = RequestMethod.POST)
 	public List<FileModel> testarRegex(@RequestBody SerieModel serie) {
-	    List<FileModel> list = new ArrayList<FileModel>();
-	    if(serie!=null){
-		File dir = new File(serie.getFilepath());
-		if(dir.exists()){
-		    for(File file:dir.listFiles()){
-			try{
-			    Pattern pattern = Pattern.compile(serie.getRegex());
-			    Matcher matcher = pattern.matcher(file.getName());
-			    if (matcher.matches()) {
-				FileModel fm = new FileModel();
-				fm.setPath(file.getAbsolutePath());
-				fm.setEpisodio(matcher.group(1));
-				fm.setSize(file.length());
-				list.add(fm);
-			    }
-			}catch(Exception e){
-			    
-			}     
-		    }
-		}    
-	    }	
-	    return list;
+		List<FileModel> list = new ArrayList<FileModel>();
+		if (serie != null) {
+			File dir = new File(serie.getFilepath());
+			if (dir.exists()) {
+				for (File file : dir.listFiles()) {
+					try {
+						Pattern pattern = Pattern.compile(serie.getRegex());
+						Matcher matcher = pattern.matcher(file.getName());
+						if (matcher.matches()) {
+							FileModel fm = new FileModel();
+							fm.setPath(file.getAbsolutePath());
+							fm.setEpisodio(matcher.group(1));
+							fm.setSize(file.length());
+							list.add(fm);
+						}
+					} catch (Exception e) {
+
+					}
+				}
+			}
+		}
+		return list;
+	}
+
+	@RequestMapping(value = "/adicionarSerie", method = RequestMethod.POST)
+	public void listarSeries(@RequestBody SerieModel serie) {
+		if (serie != null) {
+			service.adicionarSerie(serie.getName(), serie.getRegex(), serie.getFilepath());
+		}
 	}
 	
+	@RequestMapping(value = "/ultimaSerieAssistida", method = RequestMethod.POST)
+	public HistoricoModel ultimaSerieAssistida(@RequestBody SerieModel serie) {
+		return service.getUltimaSerieAssistida(serie.getId());
+	}
 	
-	@RequestMapping(value = "/adicionarSerie",method = RequestMethod.POST)
-	public void listarSeries(@RequestBody SerieModel serie) {
-	    if(serie!=null){
-		service.adicionarSerie(serie.getName(), serie.getRegex(), serie.getFilepath());
-	    }
+	@RequestMapping(value = "/buscarHistoricoEpisodio", method = RequestMethod.POST)
+	public HistoricoModel ultimaSerieAssistida(@RequestBody SerieFileModel serie) {
+		HistoricoPK pk = new HistoricoPK();
+		pk.setEpisodio(serie.getPk().getEpisodio());
+		pk.setIdSerie(serie.getPk().getIdSerie());
+		return service.getHistoricoModel(pk);
 	}
 
 }

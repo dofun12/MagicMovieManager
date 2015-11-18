@@ -56,7 +56,12 @@ public class MPHCController {
 				Document doc = Jsoup.parse(html);
 				ObjectNode node = mapper.createObjectNode();
 				for (Element el : doc.getElementsByTag("p")) {
-					node.put(el.id(), el.text());
+					if(el.text().contains("NaN")){
+						node.put(el.id(), "0");
+					}else{
+						node.put(el.id(), el.text());
+					}
+					
 				}
 				MPHCResponseModel responseModel = mapper.convertValue(node, MPHCResponseModel.class);
 				responseModel.setStatusType(MPHCStatusType.RUNNING);

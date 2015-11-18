@@ -8,13 +8,38 @@ angular.module('MainModule')
 	$scope.isWatching = false;
 	
 	
+	$scope.isLastWatched = function(serieFile){
+		if($scope.lastWatched!=null && $scope.lastWatched!=""){
+			if(serieFile.pk.episodio == $scope.lastWatched.pk.episodio 
+					&& serieFile.pk.idSerie == $scope.lastWatched.pk.idSerie){
+				return true;
+			}else{
+				return false;
+			}			
+		}else{
+			return false;
+		}	
+	}
+	
+	
 	
 	
 	$scope.selecionarSerie = function(obj) {
 		$scope.selectedSerie = obj;
 		$scope.isSerieSelecionada = true;
 		console.log($scope.selectedSerie);
+		$scope.buscarultimaSerieAssistida(obj);
 	};
+	
+	$scope.buscarultimaSerieAssistida = function(obj){
+		SeriesBrowserService.ultimaSerieAssistida(obj).success( function (response) {
+			$scope.lastWatched = response;
+			if($scope.lastWatched!=""){
+				$scope.lastWatched.percent = Math.round($scope.lastWatched.percentWatched)+"%";
+			}
+			console.log("Last",$scope.lastWatched);
+		});
+	}
 	
 	SeriesBrowserService.listarSeries().then( function (response) {
 		console.log(response.data);
@@ -70,7 +95,16 @@ angular.module('MainModule')
 	}, increment);
 	
 	$scope.play = function(episodio){
-		SeriesBrowserService.play(episodio);
+		var obj = {};
+		if($scope.isLastWatched(episodio)){
+			obj = {serie:episodio,position:$scope.lastWatched.positionstring,fullscreen:true}
+		}else{
+			obj = {serie:episodio,position:null,fullscreen:true}
+		}
+		SeriesBrowserService.play(obj);
+		
+		$scope.buscarultimaSerieAssistida($scope.selectedSerie);
+		
 	};
 	
 	
