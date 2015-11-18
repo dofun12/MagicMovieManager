@@ -53,7 +53,6 @@ public class SeriesController {
 
     @RequestMapping(value = "/listarSeries", method = RequestMethod.GET)
     public List<SerieModel> listarSeries() {
-	service.updateCatalogo();
 	return service.listarSeries();
     }
 
