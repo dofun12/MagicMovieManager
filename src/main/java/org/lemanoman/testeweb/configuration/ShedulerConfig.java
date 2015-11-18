@@ -35,6 +35,7 @@ public class ShedulerConfig {
 	    			HistoricoPK pk = new HistoricoPK();
 	    			pk.setEpisodio(sfm.getPk().getEpisodio());
 	    			pk.setIdSerie(sfm.getPk().getIdSerie());
+	    			pk.setTemporada(sfm.getPk().getTemporada());
 	    			
 	    			HistoricoModel history = new HistoricoModel();
 	    			history.setLastTimeWatched(new Date());

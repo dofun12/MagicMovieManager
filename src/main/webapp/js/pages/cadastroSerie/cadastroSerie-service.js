@@ -10,8 +10,16 @@ angular.module('MainModule')
 		return $http.get( this.baseUrl + '/listarSeries');
 	};
 	
-	this.testarRegex = function(serviceModel) {
-		return $http.post( this.baseUrl + '/testarRegex',serviceModel);
+	this.testarRegex = function(obj) {
+		return $http.post( this.baseUrl + '/testarRegex',obj);
+	};
+	
+	this.adicionarSerie = function(obj) {
+		return $http.post( this.baseUrl + '/adicionarSerie',obj);
+	};
+	
+	this.buscarArquivos = function(obj) {
+		return $http.get( this.baseUrl + '/fileChooser');
 	};
 	
 });

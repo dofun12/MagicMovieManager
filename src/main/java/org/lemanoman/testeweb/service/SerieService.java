@@ -5,6 +5,7 @@ import java.util.List;
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.HistoricoModel;
 import org.lemanoman.testeweb.model.HistoricoPK;
+import org.lemanoman.testeweb.model.NovaSerieModel;
 import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,10 @@ public interface SerieService {
     public List<SerieModel> listarSeries();
     public void updateCatalogo();
     public List<SerieModel> listarSeriesOffline();
-    public void adicionarSerie(String nome,String regex,String filepath);
+    public void adicionarSerie(NovaSerieModel serie);
     public void salvarHistorico(HistoricoModel model);
     public List<SerieFileModel> listarSeriesByPath(String path);
     public HistoricoModel getHistoricoModel(HistoricoPK pk);
-	public HistoricoModel getUltimaSerieAssistida(Integer idSerie);
+    public HistoricoModel getUltimaSerieAssistida(Integer idSerie);
     
 }

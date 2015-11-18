@@ -28,12 +28,6 @@ public class SerieModel {
     @Column
     private String name;
 
-    @Column
-    private String regex;
-
-    @Column
-    private String filepath;
-
     @Transient
     private List<SerieFileModel> files = new ArrayList<SerieFileModel>();
 
@@ -96,21 +90,4 @@ public class SerieModel {
     public void setId(Integer id) {
 	this.id = id;
     }
-
-    public String getRegex() {
-	return regex;
-    }
-
-    public void setRegex(String regex) {
-	this.regex = regex;
-    }
-
-    public String getFilepath() {
-	return filepath;
-    }
-
-    public void setFilepath(String filepath) {
-	this.filepath = filepath;
-    }
-
 }

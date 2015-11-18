@@ -19,7 +19,7 @@ angular.module('MainModule')
 		}else{
 			return false;
 		}	
-	}
+	};
 	
 	
 	

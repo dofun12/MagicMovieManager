@@ -5,6 +5,7 @@ import java.util.List;
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.HistoricoModel;
 import org.lemanoman.testeweb.model.HistoricoPK;
+import org.lemanoman.testeweb.model.NovaSerieModel;
 import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieModel;
 import org.lemanoman.testeweb.service.SerieService;
@@ -18,8 +19,8 @@ public class SerieServiceImpl implements SerieService {
 	@Autowired
 	private JdbcSerieDAO dao;
 
-	public void adicionarSerie(String nome, String regex, String filepath) {
-		dao.adicionarSerie(nome, regex, filepath);
+	public void adicionarSerie(NovaSerieModel novaSerie) {
+	    dao.adicionarSerie(novaSerie);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package org.lemanoman.testeweb.dao;
 import java.util.List;
 
 import org.lemanoman.testeweb.model.HistoricoModel;
+import org.lemanoman.testeweb.model.NovaSerieModel;
 import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieModel;
 import org.lemanoman.testeweb.model.SerieMapper;
@@ -16,9 +17,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public interface JdbcSerieDAO{
 	public List<SerieModel> listarSeriesOffline();
 	public void updateCatalogo();
-	public SerieFileModel getSerieFileModel(Integer idSerie, String episodio);
+	public SerieFileModel getSerieFileModel(Integer idSerie, String episodio,Integer temporada);
 	public List<SerieModel> listarSeries();
-	public void adicionarSerie(String nome,String regex,String filepath);
+	public void adicionarSerie(NovaSerieModel novaSerie);
 	public void salvarHistorico(HistoricoModel historicoModel);
 	public List<SerieFileModel> listarSeriesFilesByPath(String path);
 	public HistoricoModel ultimoEpisodioAssistido(Integer idSerie);

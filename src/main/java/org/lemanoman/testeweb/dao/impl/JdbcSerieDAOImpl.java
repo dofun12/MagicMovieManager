@@ -14,7 +14,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
+import org.lemanoman.testeweb.model.FileModel;
 import org.lemanoman.testeweb.model.HistoricoModel;
+import org.lemanoman.testeweb.model.NovaSerieModel;
 import org.lemanoman.testeweb.model.SerieFileMapper;
 import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieFilePK;
@@ -27,145 +29,156 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 
 @Repository
-public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements JdbcSerieDAO {
+public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel>implements JdbcSerieDAO {
 
-	@PersistenceContext
-	protected EntityManager em;
+    @PersistenceContext
+    protected EntityManager em;
 
-	@Autowired
-	private MappingJackson2HttpMessageConverter jacksonConverter;
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonConverter;
 
-	public List<SerieModel> listarSeriesOffline() {
-		SerieModel serieModel = new SerieModel();
-		serieModel.setName("Teste");
-		serieModel.setRegex(".*([0-9]{2}).mpeg");
-		serieModel.setFilepath("/home/kevim/series/teste-serie");
+    public List<SerieModel> listarSeriesOffline() {
+	SerieModel serieModel = new SerieModel();
+	serieModel.setName("Teste");
 
-		List<SerieModel> series = em.createQuery("from SerieModel s", SerieModel.class).getResultList();
+	List<SerieModel> series = em.createQuery("from SerieModel s", SerieModel.class).getResultList();
 
-		if (series == null) {
-			em.persist(serieModel);
-		} else if (series.size() == 0) {
-			em.persist(serieModel);
+	if (series == null) {
+	    em.persist(serieModel);
+	} else if (series.size() == 0) {
+	    em.persist(serieModel);
+	}
+
+	return em.createQuery("from SerieModel s", SerieModel.class).getResultList();
+    }
+
+    public void adicionarSerie(NovaSerieModel novaSerie) {
+	SerieModel serie = new SerieModel();
+	serie.setName(novaSerie.getSerie().getName());
+	em.persist(serie);
+	em.flush();
+	
+	Integer idSerie = serie.getId(); 
+	for(FileModel f:novaSerie.getEpisodios()){
+	    if(idSerie!=null && f.getEpisodio()!=null && f.getEpisodio()!=""){
+		SerieFileModel sfm = getSerieFileModel(idSerie, f.getEpisodio() , novaSerie.getTemporada());
+		if(sfm==null){
+		    sfm = new SerieFileModel();
+		    SerieFilePK pk = new SerieFilePK();
+		    pk.setEpisodio(f.getEpisodio());
+		    pk.setIdSerie(idSerie);
+		    pk.setTemporada(novaSerie.getTemporada());
+		    sfm.setPk(pk);
 		}
-
-		return em.createQuery("from SerieModel s", SerieModel.class).getResultList();
+		
+		sfm.setFilePath(f.getPath());
+		em.persist(sfm);
+	    }		
 	}
+	
+    }
 
-	public void adicionarSerie(String nome, String regex, String filepath) {
-		SerieModel serie = new SerieModel();
-		serie.setName(nome);
-		serie.setFilepath(filepath);
-		serie.setRegex(regex);
-		em.persist(serie);
+    public void updateCatalogo() {
+	/**
+	 * List<SerieModel> sources = listarSeriesOffline(); for (SerieModel
+	 * source : sources) { Integer id = source.getId(); File file = new
+	 * File(source.getFilepath()); for (File media : file.listFiles()) {
+	 * String name = media.getName();
+	 * 
+	 * String epName = getVarEpisodio(name, source.getRegex());
+	 * 
+	 * SerieFileModel mediaFile = getSerieFileModel(id, epName);
+	 * 
+	 * if (mediaFile == null) { mediaFile = new SerieFileModel(); }
+	 * 
+	 * SerieFilePK pk = new SerieFilePK(); pk.setEpisodio(epName);
+	 * pk.setIdSerie(id);
+	 * 
+	 * mediaFile.setPk(pk); mediaFile.setFile(media);
+	 * mediaFile.setFilePath(mediaFile.getFile().getAbsolutePath());
+	 * em.persist(mediaFile); } }
+	 **/
+    }
+
+    private String getVarEpisodio(String name, String regex) {
+	Pattern pattern = Pattern.compile(regex);
+	Matcher matcher = pattern.matcher(name);
+	if (matcher.matches()) {
+	    String episodio = matcher.group(1);
+	    return episodio;
 	}
+	return null;
+    }
 
-	public void updateCatalogo() {
-		List<SerieModel> sources = listarSeriesOffline();
-		for (SerieModel source : sources) {
-			Integer id = source.getId();
-			File file = new File(source.getFilepath());
-			for (File media : file.listFiles()) {
-				String name = media.getName();
+    public SerieFileModel getSerieFileModel(Integer idSerie, String episodio, Integer temporada) {
+	SerieFilePK pk = new SerieFilePK();
+	pk.setEpisodio(episodio);
+	pk.setIdSerie(idSerie);
+	pk.setTemporada(temporada);
+	return em.find(SerieFileModel.class, pk);
+    }
 
-				String epName = getVarEpisodio(name, source.getRegex());
-
-				SerieFileModel mediaFile = getSerieFileModel(id, epName);
-
-				if (mediaFile == null) {
-					mediaFile = new SerieFileModel();
-				}
-
-				SerieFilePK pk = new SerieFilePK();
-				pk.setEpisodio(epName);
-				pk.setIdSerie(id);
-
-				mediaFile.setPk(pk);
-				mediaFile.setFile(media);
-				mediaFile.setFilePath(mediaFile.getFile().getAbsolutePath());
-				em.persist(mediaFile);
-			}
-		}
+    public List<SerieModel> listarSeries() {
+	List<SerieModel> tmp = new ArrayList<SerieModel>();
+	List<SerieModel> series = em.createQuery("from SerieModel s", SerieModel.class).getResultList();
+	if (series != null) {
+	    for (SerieModel s : series) {
+		s.setFiles(listarSeriesFiles(s.getId()));
+		tmp.add(s);
+	    }
 	}
+	return tmp;
+    }
 
-	private String getVarEpisodio(String name, String regex) {
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(name);
-		if (matcher.matches()) {
-			String episodio = matcher.group(1);
-			return episodio;
-		}
-		return null;
+    public List<SerieFileModel> listarSeriesFiles(Integer idSerie) {
+	@SuppressWarnings("unchecked")
+	List<SerieFileModel> sfm = (List<SerieFileModel>) em
+		.createQuery("SELECT c FROM SerieFileModel c WHERE c.pk.idSerie = :serieId ")
+		.setParameter("serieId", idSerie).getResultList();
+	return sfm;
+    }
+
+    @Override
+    public List<SerieFileModel> listarSeriesFilesByPath(String path) {
+	@SuppressWarnings("unchecked")
+	List<SerieFileModel> sfm = (List<SerieFileModel>) em
+		.createQuery("SELECT c FROM SerieFileModel c WHERE c.filePath = :path ").setParameter("path", path)
+		.getResultList();
+	return sfm;
+    }
+
+    @Override
+    public HistoricoModel ultimoEpisodioAssistido(Integer idSerie) {
+	try {
+	    Query q = em.createQuery(
+		    "SELECT h FROM HistoricoModel h WHERE h.pk.idSerie = :idSerie ORDER BY h.lastTimeWatched DESC ");
+	    q.setParameter("idSerie", idSerie);
+	    q.setMaxResults(1);
+
+	    return (HistoricoModel) q.getSingleResult();
+	} catch (NoResultException e) {
+	    return null;
 	}
+    }
 
-	public SerieFileModel getSerieFileModel(Integer idSerie, String episodio) {
-		SerieFilePK pk = new SerieFilePK();
-		pk.setEpisodio(episodio);
-		pk.setIdSerie(idSerie);
-		return em.find(SerieFileModel.class, pk);
+    public <T> T find(Class<T> type, Object key) {
+	return em.find(type, key);
+    }
+
+    @Override
+    public void salvarHistorico(HistoricoModel historicoModel) {
+	HistoricoModel hist;
+
+	hist = em.find(HistoricoModel.class, historicoModel.getPk());
+	if (hist == null) {
+	    em.persist(historicoModel);
+	} else {
+	    hist.setLastPosition(historicoModel.getLastPosition());
+	    hist.setLastTimeWatched(historicoModel.getLastTimeWatched());
+	    hist.setPercentWatched(historicoModel.getPercentWatched());
+	    hist.setPositionstring(historicoModel.getPositionstring());
+	    em.persist(hist);
 	}
-
-	public List<SerieModel> listarSeries() {
-		List<SerieModel> tmp = new ArrayList<SerieModel>();
-		List<SerieModel> series = em.createQuery("from SerieModel s", SerieModel.class).getResultList();
-		if (series != null) {
-			for (SerieModel s : series) {
-				s.setFiles(listarSeriesFiles(s.getId()));
-				tmp.add(s);
-			}
-		}
-		return tmp;
-	}
-
-	public List<SerieFileModel> listarSeriesFiles(Integer idSerie) {
-		@SuppressWarnings("unchecked")
-		List<SerieFileModel> sfm = (List<SerieFileModel>) em
-				.createQuery("SELECT c FROM SerieFileModel c WHERE c.pk.idSerie = :serieId ")
-				.setParameter("serieId", idSerie).getResultList();
-		return sfm;
-	}
-
-	@Override
-	public List<SerieFileModel> listarSeriesFilesByPath(String path) {
-		@SuppressWarnings("unchecked")
-		List<SerieFileModel> sfm = (List<SerieFileModel>) em
-				.createQuery("SELECT c FROM SerieFileModel c WHERE c.filePath = :path ").setParameter("path", path)
-				.getResultList();
-		return sfm;
-	}
-
-	@Override
-	public HistoricoModel ultimoEpisodioAssistido(Integer idSerie) {
-		try {
-			Query q = em.createQuery(
-					"SELECT h FROM HistoricoModel h WHERE h.pk.idSerie = :idSerie ORDER BY h.lastTimeWatched DESC ");
-			q.setParameter("idSerie", idSerie);
-			q.setMaxResults(1);
-			
-			return (HistoricoModel) q.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
-
-	public <T> T find(Class<T> type, Object key) {
-		return em.find(type, key);
-	}
-
-	@Override
-	public void salvarHistorico(HistoricoModel historicoModel) {
-		HistoricoModel hist;
-
-		hist = em.find(HistoricoModel.class, historicoModel.getPk());
-		if (hist == null) {
-			em.persist(historicoModel);
-		} else {
-			hist.setLastPosition(historicoModel.getLastPosition());
-			hist.setLastTimeWatched(historicoModel.getLastTimeWatched());
-			hist.setPercentWatched(historicoModel.getPercentWatched());
-			hist.setPositionstring(historicoModel.getPositionstring());
-			em.persist(hist);
-		}
-	}
+    }
 
 }

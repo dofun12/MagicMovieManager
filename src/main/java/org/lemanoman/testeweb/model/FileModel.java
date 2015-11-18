@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileModel {
+    private String name;
     private String path;
     private Long size;
     private String episodio;
@@ -25,6 +26,12 @@ public class FileModel {
     }
     public void setEpisodio(String episodio) {
         this.episodio = episodio;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
     
     
