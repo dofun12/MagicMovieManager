@@ -29,10 +29,20 @@
 		<form class="form-horizontal">
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Nome da Serie</label>
-				<div class="col-sm-8">
-					<input type="text" class="form-control" ng-model="serieName" placeholder="ex: Big Bang Theory "
+				<div class="col-sm-6">
+					<input ng-show="isNovaSerie" type="text" class="form-control" ng-model="serieName" placeholder="ex: Big Bang Theory "
 						aria-describedby="basic-addon1"
 					>
+					<select ng-show="!isNovaSerie" class="form-control" ng-change="onChangeSerie()" ng-model="selectedSerie">
+						<option ng-repeat="serie in seriesDisponiveis" value="{{serie.id}}">{{serie.name}}</option>
+					</select>
+				</div>
+				<div class="col-sm-2">	
+					<div class="checkbox" ng-show="false">
+					 	<label>
+					      <input type="checkbox" ng-model="isNovaSerie"> Nova Serie
+					    </label>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">
@@ -67,7 +77,7 @@
 				<div class="col-sm-8">
 					<table class="table">
 						<tr ng-repeat="file in files">
-							<td>{{file.episodio}}</td>
+							<td><input type="text" ng-model="file.episodio"></input></td>
 							<td>{{file.name}}</td>
 						</tr>
 					</table>
@@ -80,6 +90,12 @@
 						<option ng-repeat="temp in temporadas" value="{{temp.value}}">{{temp.name}}</option>
 					</select>
 				</div>
+			</div>
+			<div ng-if="showMensagem" class="alert alert-info" role="alert">
+				{{message}}
+			</div>
+			<div ng-if="showMensagemError" class="alert alert-danger" role="alert">
+				{{message}}
 			</div>
 			<button class="btn btn-default" ng-click="salvarSerie()">Adicionar Serie</button>
 		</form>

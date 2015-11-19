@@ -61,5 +61,19 @@ public class MovieSessionController {
 			}
 		}
 	}
+	
+	@RequestMapping(value = "/desligar", method = RequestMethod.POST)
+	public void desligar() {
+		try {
+			StringBuilder command = new StringBuilder();
+			command.append("shutdown /s");
+			
+			String commandStr = command.toString();
+			System.out.println(commandStr);
+			Runtime.getRuntime().exec(commandStr);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

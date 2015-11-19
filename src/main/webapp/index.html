@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="MainModule" >
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,9 +13,25 @@
 		<script src="js/lib/jquery/jquery-1.11.3.min.js"></script>
 		
 		<script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
+		<script >
+			var module = angular.module('MainModule',[]);
+			module.service('IndexService', function($http, $browser , $window) {
+				this.baseUrl = $window.location.origin+$window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
+				this.desligar = function() {
+					return $http.post( this.baseUrl + '/desligar',{});
+				};
+							
+			});
+			module.controller('IndexController', function($scope, $browser, $window, $browser, $interval , IndexService) {
+				$scope.desligar = function(){
+					IndexService.desligar();
+				}
+			}
+		);
+		</script>
 	</head>	
 	
-	<body>
+	<body ng-controller="IndexController">
 		<ul class="nav nav-pills nav-stacked">
 		  	<li role="presentation"><a href="home.html">Home</a></li>
 		</ul>
@@ -27,6 +43,9 @@
 		</ul>
 		<ul class="nav nav-pills nav-stacked">
 		  	<li role="presentation"><a href="cadastroSerie.html">Cadastro</a></li>
+		</ul>
+		<ul class="nav nav-pills nav-stacked">
+		  	<li role="presentation" ng-click="desligar()"><a >Desligar PC</a></li>
 		</ul>
 	</body>
 </html>

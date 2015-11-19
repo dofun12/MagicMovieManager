@@ -18,6 +18,10 @@ angular.module('MainModule')
 		return $http.post( this.baseUrl + '/adicionarSerie',obj);
 	};
 	
+	this.validar = function(obj) {
+		return $http.post( this.baseUrl + '/validarSeries',obj);
+	};
+	
 	this.buscarArquivos = function(obj) {
 		return $http.get( this.baseUrl + '/fileChooser');
 	};
