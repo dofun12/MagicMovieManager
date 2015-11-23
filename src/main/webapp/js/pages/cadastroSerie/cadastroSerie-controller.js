@@ -21,6 +21,20 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 		});
 	};
 	
+	$scope.sortListViewFiles = function(){
+		var ar = $scope.viewFiles;
+		for(var i = (ar.length - 1); i >= 0; i--){
+			for (var j = 1; j <= i; j++){
+				if (!ar[j-1].directory){
+					var temp = ar[j-1];
+					ar[j-1] = ar[j];
+					ar[j] = temp;
+				} 
+			}
+		}
+		$scope.viewFiles = ar;
+	};
+	
 	$scope.listarSeries();
 	$scope.onChangeSerie = function(){
 		$scope.serieObj = {};
@@ -30,7 +44,6 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 				$scope.serieObj = serie;
 			}
 		}
-		console.log($scope.serieObj);
 		var files = $scope.serieObj.files;
 		$scope.files = [];
 		$scope.arquivos = [];
@@ -38,13 +51,12 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 			var file = files[i];
 			var split = file.filePath.split("\\");
 			var name = split[split.length-1];
-			console.log(file)
 			var fileModel = {name:name,path:file.filePath,episodio:file.pk.episodio};
 			$scope.files[i] = fileModel;
 			$scope.arquivos[i] = fileModel;
 		}
 		
-	}
+	};
 	
 	for (var temp = 0; temp < 40; temp++) {
 		if (temp == 0) {
@@ -61,10 +73,67 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 	}
 	$scope.buscarArquivos = function() {
 		CadastroSerieService.buscarArquivos().then(function(response) {
-			console.log(response);
 			$scope.arquivos = $scope.arquivos.concat(response.data);
 		});
 	};
+	$scope.lastSelectedViewFile = $scope.selectedViewFile;
+	$scope.mostrarTituloFileView = false;
+	$scope.viewDirectory = function(obj) {
+		if(angular.isDefined(obj) && obj!=null && !obj==""){
+			CadastroSerieService.viewDirectory(obj).then(function(response) {
+				$scope.selectedFiles = [];
+				
+				$scope.lastSelectedViewFile = $scope.selectedViewFile;
+				$scope.selectedViewFile = obj;
+				$scope.viewFiles = response.data;
+				$scope.sortListViewFiles();
+				if(angular.isDefined(obj.path)){
+					$scope.mostrarTituloFileView = true;				
+				}else{
+					$scope.mostrarTituloFileView = false;
+				}
+				
+			});
+		}	
+	};
+	
+	$scope.viewParentDirectory = function(obj) {
+		if(angular.isDefined(obj) && obj!=null && !obj==""){
+			CadastroSerieService.viewParentDirectory(obj).then(function(response) {
+				$scope.selectedFiles = [];
+				
+				$scope.lastSelectedViewFile = $scope.selectedViewFile;
+				$scope.selectedViewFile = response.data.parentfile;
+				$scope.viewFiles = response.data.files;
+				$scope.sortListViewFiles();
+				if(angular.isDefined(obj.path)){
+					$scope.mostrarTituloFileView = true;				
+				}else{
+					$scope.mostrarTituloFileView = false;
+				}
+				
+			});
+		}	
+	};
+	
+	$scope.selectedFiles = [];
+	
+	$scope.selectFile = function(id){
+		console.log(id);
+		if($scope.selectedFiles[id]){
+			$scope.selectedFiles[id] = false;
+		}else{
+			$scope.selectedFiles[id] = true;
+		}
+	};
+	
+	$scope.isSelected = function(id){
+		return $scope.selectedFiles[id];
+	};
+	
+	
+	$scope.selectedViewFile = null;
+	$scope.viewDirectory({});
 
 	$scope.selecionarRegex = function(regex) {
 		$scope.selectedRegex = regex;
@@ -79,7 +148,6 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 			};
 
 			CadastroSerieService.testarRegex(obj).then(function(response) {
-				console.log(response);
 				$scope.files = response.data;
 			});
 		}
@@ -90,8 +158,6 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 			regex : $scope.serieRegex,
 			files : $scope.files
 		};
-
-		console.log("TEste", $scope.regexDisp);
 
 		$scope.totalEncontrados = 0;
 
@@ -111,8 +177,25 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 		$scope.selectedTemporada = null;
 	};
 	
+	$scope.adicionarArquivos = function(){
+		$scope.files = [];
+		console.log("Teste",$scope.selectedFiles);
+		for(var i=0;i<$scope.selectedFiles.length;i++){
+			console.log($scope.selectedFiles[i]);
+			for(var x=0;x<$scope.viewFiles.length;x++){
+				if($scope.selectedFiles[i]){
+					var tmp = $scope.viewFiles[x]; 
+					if(tmp.id == i){
+						$scope.arquivos.push(tmp);		
+					}
+				}
+			}
+		}
+	};
+	
+	
 	$scope.salvarSerie = function() {
-		var serieModel = {}
+		var serieModel = {};
 		if($scope.isNovaSerie){
 			serieModel = {
 				name : $scope.serieName
@@ -125,7 +208,6 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 			serie : serieModel,
 			episodios : $scope.files
 		};
-		console.log("Trying",obj);
 		CadastroSerieService.validar(obj).success(function(response){
 			if(response.isValid){
 				CadastroSerieService.adicionarSerie(obj).success(function(response){

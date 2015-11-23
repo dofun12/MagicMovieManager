@@ -26,4 +26,12 @@ angular.module('MainModule')
 		return $http.get( this.baseUrl + '/fileChooser');
 	};
 	
+	this.viewDirectory = function(obj) {
+		return $http.post( this.baseUrl + '/viewDirectory',obj);
+	};
+	
+	this.viewParentDirectory = function(obj) {
+		return $http.post( this.baseUrl + '/viewParentDirectory',obj);
+	};
+	
 });
