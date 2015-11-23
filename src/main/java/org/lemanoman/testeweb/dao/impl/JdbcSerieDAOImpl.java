@@ -172,6 +172,15 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements
 	public <T> T find(Class<T> type, Object key) {
 		return em.find(type, key);
 	}
+	
+	public void deleteAllSeriesFileModel(Integer idSerie){
+	    List<SerieFileModel> seriesFileModel = listarSeriesFiles(idSerie);
+	    if(seriesFileModel!=null){
+		for(SerieFileModel serieF:seriesFileModel){
+		    em.remove(serieF);
+		}
+	    }
+	}
 
 	@Override
 	public void salvarHistorico(HistoricoModel historicoModel) {

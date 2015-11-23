@@ -24,4 +24,5 @@ public interface JdbcSerieDAO{
 	public List<SerieFileModel> listarSeriesFilesByPath(String path);
 	public HistoricoModel ultimoEpisodioAssistido(Integer idSerie);
 	public <T>T find(Class<T> type,Object key);
+	public void deleteAllSeriesFileModel(Integer idSerie);
 }

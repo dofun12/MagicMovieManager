@@ -45,6 +45,10 @@ public class SerieServiceImpl implements SerieService {
 			dao.salvarHistorico(model);
 		}
 	}
+	
+	public void deleteAllSerieFileModel(Integer idSerie) {
+	    dao.deleteAllSeriesFileModel(idSerie);
+	}
 
 	@Override
 	public HistoricoModel getHistoricoModel(HistoricoPK pk) {

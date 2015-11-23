@@ -81,6 +81,9 @@ public class SeriesController {
     @RequestMapping(value = "/adicionarSerie", method = RequestMethod.POST)
     public void adicionarSerie(@RequestBody NovaSerieModel novaSerie) {
 	if (novaSerie != null) {
+	    if(novaSerie.getSerie()!=null && novaSerie.getSerie().getId()!=null){
+		service.deleteAllSerieFileModel(novaSerie.getSerie().getId());
+	    }
 	    service.adicionarSerie(novaSerie);
 	}
     }

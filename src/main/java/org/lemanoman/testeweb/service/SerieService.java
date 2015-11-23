@@ -21,5 +21,5 @@ public interface SerieService {
     public List<SerieFileModel> listarSeriesByPath(String path);
     public HistoricoModel getHistoricoModel(HistoricoPK pk);
     public HistoricoModel getUltimaSerieAssistida(Integer idSerie);
-    
+    public void deleteAllSerieFileModel(Integer idSerie);
 }
