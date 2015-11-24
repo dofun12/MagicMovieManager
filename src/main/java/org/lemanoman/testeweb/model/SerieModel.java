@@ -27,12 +27,12 @@ public class SerieModel {
 
     @Column
     private String name;
-
+    
     @Column
-    private String regex;
-
+    private boolean secret;
+    
     @Column
-    private String filepath;
+    private boolean visible;
 
     @Transient
     private List<SerieFileModel> files = new ArrayList<SerieFileModel>();
@@ -97,20 +97,20 @@ public class SerieModel {
 	this.id = id;
     }
 
-    public String getRegex() {
-	return regex;
-    }
+	public boolean isSecret() {
+		return secret;
+	}
 
-    public void setRegex(String regex) {
-	this.regex = regex;
-    }
+	public void setSecret(boolean secret) {
+		this.secret = secret;
+	}
 
-    public String getFilepath() {
-	return filepath;
-    }
+	public boolean isVisible() {
+		return visible;
+	}
 
-    public void setFilepath(String filepath) {
-	this.filepath = filepath;
-    }
-
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+    
 }

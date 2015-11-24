@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,61 +16,72 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name="historico")
+@Table(name = "historico")
 public class HistoricoModel {
-    	@Id
-    	@GeneratedValue
-    	private Integer codigo;
+	@EmbeddedId
+	private HistoricoPK pk;
 
-    	@Column
-    	private Integer idSerieFile;
-    	
-    	@Transient
+	@Transient
 	private MPHCResponseModel status;
-    	
-    	@Column
+
+	@Column
 	private Date lastTimeWatched;
-    	
-    	@Column
+
+	@Column
 	private Double percentWatched;
-
-	public Integer getCodigo() {
-	    return codigo;
+	
+	@Column
+	private String positionstring;
+	
+	public String getPositionstring() {
+		return positionstring;
 	}
 
-	public void setCodigo(Integer codigo) {
-	    this.codigo = codigo;
+	public void setPositionstring(String positionstring) {
+		this.positionstring = positionstring;
 	}
 
-	public Integer getIdSerieFile() {
-	    return idSerieFile;
+	@Column
+	private Long lastPosition;
+
+	public HistoricoPK getPk() {
+		return pk;
 	}
 
-	public void setIdSerieFile(Integer idSerieFile) {
-	    this.idSerieFile = idSerieFile;
+	public void setPk(HistoricoPK pk) {
+		this.pk = pk;
 	}
 
 	public MPHCResponseModel getStatus() {
-	    return status;
+		return status;
 	}
 
 	public void setStatus(MPHCResponseModel status) {
-	    this.status = status;
+		this.status = status;
 	}
 
 	public Date getLastTimeWatched() {
-	    return lastTimeWatched;
+		return lastTimeWatched;
 	}
 
 	public void setLastTimeWatched(Date lastTimeWatched) {
-	    this.lastTimeWatched = lastTimeWatched;
+		this.lastTimeWatched = lastTimeWatched;
 	}
 
 	public Double getPercentWatched() {
-	    return percentWatched;
+		return percentWatched;
 	}
 
 	public void setPercentWatched(Double percentWatched) {
-	    this.percentWatched = percentWatched;
+		this.percentWatched = percentWatched;
 	}
+
+	public Long getLastPosition() {
+		return lastPosition;
+	}
+
+	public void setLastPosition(Long lastPosition) {
+		this.lastPosition = lastPosition;
+	}
+	
 }

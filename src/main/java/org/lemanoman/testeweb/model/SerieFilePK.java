@@ -18,27 +18,47 @@ public class SerieFilePK implements Serializable {
     @Column
     private Integer idSerie;
     
-    
+    @Column
+    private Integer temporada;
+
     public String getEpisodio() {
         return episodio;
     }
+
     public void setEpisodio(String episodio) {
         this.episodio = episodio;
     }
+
     public Integer getIdSerie() {
         return idSerie;
     }
+
     public void setIdSerie(Integer idSerie) {
         this.idSerie = idSerie;
     }
+
+    public Integer getTemporada() {
+        return temporada;
+    }
+
+    public void setTemporada(Integer temporada) {
+        this.temporada = temporada;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
     @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + ((episodio == null) ? 0 : episodio.hashCode());
 	result = prime * result + ((idSerie == null) ? 0 : idSerie.hashCode());
+	result = prime * result + ((temporada == null) ? 0 : temporada.hashCode());
 	return result;
     }
+
     @Override
     public boolean equals(Object obj) {
 	if (this == obj)
@@ -58,7 +78,14 @@ public class SerieFilePK implements Serializable {
 		return false;
 	} else if (!idSerie.equals(other.idSerie))
 	    return false;
+	if (temporada == null) {
+	    if (other.temporada != null)
+		return false;
+	} else if (!temporada.equals(other.temporada))
+	    return false;
 	return true;
     }
+    
+    
     
 }

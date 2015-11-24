@@ -18,5 +18,22 @@ angular.module('MainModule')
 		return $http.get( this.baseUrl + '/statusMPHC');
 	};
 	
+	this.ultimaSerieAssistida = function(serie) {
+		return $http.post( this.baseUrl + '/ultimaSerieAssistida', serie);
+	};
+	
+	this.buscarHistoricoEpisodio = function(serieFile) {
+		return $http.post( this.baseUrl + '/buscarHistoricoEpisodio', serieFile);
+	};
+	
+	this.rodarComando = function(id) {
+		return $http.get( this.baseUrl + '/runCommand/'+id);
+	};
+	
+	this.listarSerieSecreta = function(serie) {
+		return $http.post( this.baseUrl + '/listarSerieSecreta', serie);
+	};
+	
+	
 	
 });

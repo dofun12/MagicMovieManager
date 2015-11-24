@@ -8,14 +8,57 @@ angular.module('MainModule')
 	$scope.isWatching = false;
 	
 	
+	$scope.isLastWatched = function(serieFile){
+		if($scope.lastWatched!=null && $scope.lastWatched!=""){
+			if(serieFile.pk.episodio == $scope.lastWatched.pk.episodio 
+					&& serieFile.pk.idSerie == $scope.lastWatched.pk.idSerie){
+				return true;
+			}else{
+				return false;
+			}			
+		}else{
+			return false;
+		}	
+	};
+	
+	
 	
 	
 	$scope.selecionarSerie = function(obj) {
-		$scope.selectedSerie = obj;
-		$scope.isSerieSelecionada = true;
-		console.log($scope.selectedSerie);
+		if(obj.secret){
+			$scope.isSecretSerie = true; 
+			console.log("Secret Serie xD");
+			SeriesBrowserService.listarSerieSecreta(obj).then( function (response) {
+				obj.files = response.data;
+				$scope.isSerieSelecionada = true;
+				$scope.selectedSerie = obj;
+			});
+		}else{
+			$scope.selectedSerie = obj;
+			$scope.isSerieSelecionada = true;
+			$scope.isSecretSerie = false;
+		}
+		$scope.buscarultimaSerieAssistida(obj);
 	};
 	
+	
+	$scope.getImageLocation = function(file){
+		var str = '';
+		str = file.filePath;
+		str = str.replace("flv", "png");
+		str = str.replace("F:\\DataFiles\\temp", "images\\");
+		return str;
+	};
+	
+	$scope.buscarultimaSerieAssistida = function(obj){
+		SeriesBrowserService.ultimaSerieAssistida(obj).success( function (response) {
+			$scope.lastWatched = response;
+			if($scope.lastWatched!=""){
+				$scope.lastWatched.percent = Math.round($scope.lastWatched.percentWatched)+"%";
+			}
+			console.log("Last",$scope.lastWatched);
+		});
+	}
 	SeriesBrowserService.listarSeries().then( function (response) {
 		console.log(response.data);
 		$scope.seriesList = response.data;
@@ -67,12 +110,41 @@ angular.module('MainModule')
 				});
 			}
 		}
+		if($scope.isRunning){
+			$( "#slider" ).slider({
+				value: $scope.lastPos,
+				min: 0,
+			    max: $scope.jsonData.duration,
+			    slide: function( event, ui ) {
+			    	$scope.goToPosition(ui.value);
+			    }
+			});
+		}
 	}, increment);
 	
+	
+	
 	$scope.play = function(episodio){
-		SeriesBrowserService.play(episodio);
+		var obj = {};
+		if($scope.isLastWatched(episodio)){
+			obj = {serie:episodio,position:$scope.lastWatched.positionstring,fullscreen:true}
+		}else{
+			obj = {serie:episodio,position:null,fullscreen:true}
+		}
+		SeriesBrowserService.play(obj);
+		
+		$scope.buscarultimaSerieAssistida($scope.selectedSerie);
+		
 	};
 	
+	$scope.goToPosition = function(positionLong){
+		var obj = {serie:null,positionLong:positionLong,fullscreen:true};
+		SeriesBrowserService.play(obj);
+	};
+	
+	$scope.rodarComando = function(id){
+		SeriesBrowserService.rodarComando(id);
+	};
 	
 	
 	

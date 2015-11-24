@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html ng-app="MainModule">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="js/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="js/lib/angularjs/angular.min.js"></script>
+<script src="js/lib/jquery/jquery-1.11.3.min.js"></script>
+<script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/geral/main-module.js"></script>
+<script src="js/pages/cadastroSerie/cadastroSerie-controller.js"></script>
+<script src="js/pages/cadastroSerie/cadastroSerie-service.js"></script>
+<link rel="stylesheet" type="text/css" href="css/default.css"></link>
+</head>
+<body>
+	<div ng-controller="CadastroSerieController">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div ng-show="!isSerieSelecionada">
+					<span>Cadastro de Series</span> <a href="index.html">
+						<button class="btn btn-default botaoVoltar">
+							<span class="glyphicon glyphicon-chevron-left"></span>
+						</button>
+					</a>
+				</div>
+			</div>
+		</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Nome da Serie</label>
+				<div class="col-sm-8">
+					<input ng-show="isNovaSerie" type="text" class="form-control" ng-model="serieName"
+						placeholder="ex: Big Bang Theory " aria-describedby="basic-addon1"
+					> <select ng-show="!isNovaSerie" class="form-control" ng-change="onChangeSerie()"
+						ng-model="selectedSerie"
+					>
+						<option ng-repeat="serie in seriesDisponiveis" value="{{serie.id}}">{{serie.name}}</option>
+					</select>
+				</div>
+				<div class="col-sm-2">
+					<div class="checkbox" >
+						<label> <input type="checkbox" ng-model="isNovaSerie"> Nova Serie
+						</label>
+					</div>
+					<div class="checkbox" >
+						<label> <input type="checkbox" ng-model="isSecret">
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Selecionar Arquivos</label>
+				<div class="col-sm-8">
+					<div class="panel panel-default">
+						<div ng-if="mostrarTituloFileView" class="panel-heading">
+							<span>{{selectedViewFile.path}}</span>
+							<button ng-click="viewParentDirectory(selectedViewFile);" class="btn btn-default botaoVoltar">
+								<span class="glyphicon glyphicon-open"></span>
+							</button>
+							<button ng-click="viewDirectory(lastSelectedViewFile);" class="btn btn-default botaoVoltar">
+								<span class="glyphicon glyphicon-menu-left"></span>
+							</button>
+						</div>
+						<div class="panel-body"  style="height: 400px;overflow: auto;width: 100%;">
+							<div class="col-sm-12 list-group" ng-repeat="fileview in viewFiles">
+								<button ng-show="fileview.directory" class="list-group-item"
+									ng-click="viewDirectory(fileview);"
+								>
+									<div>
+										<div>
+											<span class="glyphicon glyphicon-folder-close"></span>
+											<span style="margin-left: 8px">{{fileview.name}}</span>
+										</div>
+									</div>
+									
+								</button>
+								<button ng-class="{'selectedfile-item':isSelected(fileview.id)}" ng-show="!fileview.directory" ng-click="selectFile(fileview.id);" class="list-group-item">
+									<div>
+										<div>
+											<span class="glyphicon glyphicon-file"></span>
+											<span style="margin-left: 8px">{{fileview.name}}</span>
+										</div>
+									</div>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2">&nbsp;</div>
+			</div>
+			<div class="row">
+				<label class="col-sm-2 control-label">&nbsp;</label>
+				<div class="col-sm-4">
+					<button class="btn btn-default" ng-click="adicionarTodos();" style="width:100%;">Selecionar todos</button>
+				</div>
+				<div class="col-sm-4">
+					<button class="btn btn-default" ng-click="adicionarArquivos();" style="width:100%;">Adicionar Arquivos</button>
+				</div>
+				
+				<div class="col-sm-2">
+					&nbsp;
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Arquivos Selecionados</label>
+				<div class="col-sm-8">
+					<table class="table">
+						<tr ng-repeat="file in arquivos">
+							<td>{{file.name}}</td>
+							<td>{{file.path}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Regex</label>
+				<div class="col-sm-8">
+					<select ng-change="aplicarRegex()" class="form-control" ng-model="selectedRegex">
+						<option ng-repeat="regex in regexDisp">{{regex}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Episodios</label>
+				<div class="col-sm-8">
+					<table class="table">
+						<tr ng-repeat="file in files">
+							<td><input type="text" ng-model="file.episodio"></input></td>
+							<td>{{file.name}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Temporada</label>
+				<div class="col-sm-8">
+					<select class="form-control" ng-model="selectedTemporada">
+						<option ng-repeat="temp in temporadas" value="{{temp.value}}">{{temp.name}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-sm-2 control-label">&nbsp;</label>
+				<div class="col-sm-8">
+					<div ng-if="showMensagem" class="alert alert-info" role="alert">{{message}}</div>
+					<div ng-if="showMensagemError" class="alert alert-danger" role="alert">{{message}}</div>
+					<button style="width:100%;" class="btn btn-default" ng-click="salvarSerie()">Salvar Serie</button>
+				</div>
+				<div class="col-sm-2">
+					&nbsp;
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12" style="height: 100px;">&nbsp;</div>
+			</div>	
+		</form>
+	</div>
+</body>
+</html>
