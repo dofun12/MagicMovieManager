@@ -39,7 +39,11 @@ public class SerieServiceImpl implements SerieService {
 	public List<SerieFileModel> listarSeriesByPath(String path) {
 		return dao.listarSeriesFilesByPath(path);
 	}
-
+	
+	public List<SerieFileModel> listarSerieSecreta(SerieModel serieModel){
+		return dao.listarSerieSecreta(serieModel);
+	}
+	
 	public void salvarHistorico(HistoricoModel model) {
 		if (model != null && model.getPk() != null) {
 			dao.salvarHistorico(model);
@@ -48,6 +52,16 @@ public class SerieServiceImpl implements SerieService {
 	
 	public void deleteAllSerieFileModel(Integer idSerie) {
 	    dao.deleteAllSeriesFileModel(idSerie);
+	}
+	
+	@Override
+	public void setAllSecretSeriesVisible() {
+	    dao.setAllSecretSeriesVisible();
+	}
+	
+	@Override
+	public void setAllSecretSeriesInvisible() {
+	    dao.setAllSecretSeriesInvisible();
 	}
 
 	@Override

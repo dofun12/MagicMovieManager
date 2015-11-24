@@ -3,7 +3,7 @@
  */
 
 angular.module('MainModule', []).controller('CadastroSerieController', function($scope, $browser, $window, $browser, $interval, CadastroSerieService) {
-	$scope.regexDisp = [ '.*([0-9]{3}).mp4', '.*([0-9]{2}).mp4', '.*(S[0-9]{2}E[0-9]{2}).*', '.*([0-9]{2}).mpeg' ];
+	$scope.regexDisp = [ '.*([0-9]{3}).mp4', '.*([0-9]{2}).mp4', '.*(S[0-9]{2}E[0-9]{2}).*',  '.*([0-9]{4}).flv'];
 	$scope.temporadas = [];
 	$scope.isNovaSerie = true;
 	$scope.files = [];
@@ -37,11 +37,15 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 	
 	$scope.listarSeries();
 	$scope.onChangeSerie = function(){
+		console.log("Series dispo ",$scope.seriesDisponiveis);
+		console.log("Change to ",$scope.selectedSerie);
 		$scope.serieObj = {};
 		for(var s=0;s<$scope.seriesDisponiveis.length;s++){
 			var serie = $scope.seriesDisponiveis[s];
-			if(serie.id = $scope.selectedSerie){
+			if(serie.id == $scope.selectedSerie){
 				$scope.serieObj = serie;
+				console.log("Change to ",$scope.serieObj);
+				break;
 			}
 		}
 		var files = $scope.serieObj.files;
@@ -55,7 +59,7 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 			$scope.files[i] = fileModel;
 			$scope.arquivos[i] = fileModel;
 		}
-		
+		console.log($scope.files);
 	};
 	
 	for (var temp = 0; temp < 40; temp++) {
@@ -131,6 +135,13 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 		return $scope.selectedFiles[id];
 	};
 	
+	$scope.adicionarTodos = function(){
+		for(var y=0;y<$scope.viewFiles.length;y++){
+			if(!$scope.viewFiles[y].directory){
+				$scope.selectFile($scope.viewFiles[y].id);
+			}	
+		}
+	}
 	
 	$scope.selectedViewFile = null;
 	$scope.viewDirectory({});
@@ -198,7 +209,8 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 		var serieModel = {};
 		if($scope.isNovaSerie){
 			serieModel = {
-				name : $scope.serieName
+				name : $scope.serieName,
+				secret: $scope.isSecret
 			};
 		}else{
 			serieModel = $scope.serieObj;
@@ -208,6 +220,7 @@ angular.module('MainModule', []).controller('CadastroSerieController', function(
 			serie : serieModel,
 			episodios : $scope.files
 		};
+		console.log(obj);
 		CadastroSerieService.validar(obj).success(function(response){
 			if(response.isValid){
 				CadastroSerieService.adicionarSerie(obj).success(function(response){

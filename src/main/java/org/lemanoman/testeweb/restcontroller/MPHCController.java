@@ -20,7 +20,11 @@ import org.jsoup.nodes.Element;
 import org.lemanoman.testeweb.model.GreetingModel;
 import org.lemanoman.testeweb.model.MPHCResponseModel;
 import org.lemanoman.testeweb.model.MPHCStatusType;
+import org.lemanoman.testeweb.model.NovaSerieModel;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -82,5 +86,17 @@ public class MPHCController {
 		response.setStatusType(MPHCStatusType.ERROR);
 		return response;
 	}
+	
+	@RequestMapping(value = "/runCommand/{id}", method = RequestMethod.GET)
+	public void runCommand(@PathVariable("id") int id) {
+		HttpClient httpclient = HttpClientBuilder.create().build();
+		HttpGet httpGet = new HttpGet("http://localhost:13579/command.html?wm_command="+id);
+		try {
+			httpclient.execute(httpGet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
+	
 }

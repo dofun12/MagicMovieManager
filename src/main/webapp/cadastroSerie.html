@@ -39,8 +39,12 @@
 					</select>
 				</div>
 				<div class="col-sm-2">
-					<div class="checkbox" ng-show="false">
+					<div class="checkbox" >
 						<label> <input type="checkbox" ng-model="isNovaSerie"> Nova Serie
+						</label>
+					</div>
+					<div class="checkbox" >
+						<label> <input type="checkbox" ng-model="isSecret">
 						</label>
 					</div>
 				</div>
@@ -87,9 +91,13 @@
 			</div>
 			<div class="row">
 				<label class="col-sm-2 control-label">&nbsp;</label>
-				<div class="col-sm-8">
+				<div class="col-sm-4">
+					<button class="btn btn-default" ng-click="adicionarTodos();" style="width:100%;">Selecionar todos</button>
+				</div>
+				<div class="col-sm-4">
 					<button class="btn btn-default" ng-click="adicionarArquivos();" style="width:100%;">Adicionar Arquivos</button>
 				</div>
+				
 				<div class="col-sm-2">
 					&nbsp;
 				</div>

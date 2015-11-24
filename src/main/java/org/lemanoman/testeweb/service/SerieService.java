@@ -22,4 +22,7 @@ public interface SerieService {
     public HistoricoModel getHistoricoModel(HistoricoPK pk);
     public HistoricoModel getUltimaSerieAssistida(Integer idSerie);
     public void deleteAllSerieFileModel(Integer idSerie);
+    public List<SerieFileModel> listarSerieSecreta(SerieModel serieModel);
+    public void setAllSecretSeriesVisible();
+    public void setAllSecretSeriesInvisible();
 }

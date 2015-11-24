@@ -27,8 +27,27 @@ angular.module('MainModule')
 	$scope.selecionarSerie = function(obj) {
 		$scope.selectedSerie = obj;
 		$scope.isSerieSelecionada = true;
+		console.log(obj);
+		if(obj.secret){
+			$scope.isSecretSerie = true; 
+			console.log("Secret Serie xD");
+			SeriesBrowserService.listarSerieSecreta(obj).then( function (response) {
+				$scope.selectedSerie.files = response.data
+			});
+		}else{
+			$scope.isSecretSerie = false;
+		}
 		console.log($scope.selectedSerie);
 		$scope.buscarultimaSerieAssistida(obj);
+	};
+	
+	
+	$scope.getImageLocation = function(file){
+		var str = '';
+		str = file.filePath;
+		str = str.replace("flv", "png");
+		str = str.replace("F:\\DataFiles\\temp", "images\\");
+		return str;
 	};
 	
 	$scope.buscarultimaSerieAssistida = function(obj){
@@ -40,7 +59,6 @@ angular.module('MainModule')
 			console.log("Last",$scope.lastWatched);
 		});
 	}
-	
 	SeriesBrowserService.listarSeries().then( function (response) {
 		console.log(response.data);
 		$scope.seriesList = response.data;
@@ -92,7 +110,19 @@ angular.module('MainModule')
 				});
 			}
 		}
+		if($scope.isRunning){
+			$( "#slider" ).slider({
+				value: $scope.lastPos,
+				min: 0,
+			    max: $scope.jsonData.duration,
+			    slide: function( event, ui ) {
+			    	$scope.goToPosition(ui.value);
+			    }
+			});
+		}
 	}, increment);
+	
+	
 	
 	$scope.play = function(episodio){
 		var obj = {};
@@ -107,6 +137,14 @@ angular.module('MainModule')
 		
 	};
 	
+	$scope.goToPosition = function(positionLong){
+		var obj = {serie:null,positionLong:positionLong,fullscreen:true};
+		SeriesBrowserService.play(obj);
+	};
+	
+	$scope.rodarComando = function(id){
+		SeriesBrowserService.rodarComando(id);
+	};
 	
 	
 	

@@ -25,4 +25,7 @@ public interface JdbcSerieDAO{
 	public HistoricoModel ultimoEpisodioAssistido(Integer idSerie);
 	public <T>T find(Class<T> type,Object key);
 	public void deleteAllSeriesFileModel(Integer idSerie);
+	public List<SerieFileModel> listarSerieSecreta(SerieModel serieModel);
+	public void setAllSecretSeriesInvisible();
+	public void setAllSecretSeriesVisible();
 }

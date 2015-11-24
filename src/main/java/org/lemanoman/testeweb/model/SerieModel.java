@@ -27,6 +27,12 @@ public class SerieModel {
 
     @Column
     private String name;
+    
+    @Column
+    private boolean secret;
+    
+    @Column
+    private boolean visible;
 
     @Transient
     private List<SerieFileModel> files = new ArrayList<SerieFileModel>();
@@ -90,4 +96,21 @@ public class SerieModel {
     public void setId(Integer id) {
 	this.id = id;
     }
+
+	public boolean isSecret() {
+		return secret;
+	}
+
+	public void setSecret(boolean secret) {
+		this.secret = secret;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+    
 }

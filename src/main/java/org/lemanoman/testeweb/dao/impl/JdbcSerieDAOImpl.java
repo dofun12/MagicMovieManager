@@ -60,6 +60,7 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements
 			}else{
 				serie = new SerieModel();
 				serie.setName(novaSerie.getSerie().getName());
+				serie.setSecret(novaSerie.getSerie().isSecret());
 				em.persist(serie);
 				em.flush();
 			}	
@@ -137,6 +138,33 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements
 		}
 		return tmp;
 	}
+	
+	public List<SerieFileModel> listarSerieSecreta(SerieModel serieModel) {
+		List<SerieFileModel> sfms = new ArrayList();
+		File defaultPath = new File("F:\\DataFiles\\temp");
+		if(serieModel!=null && serieModel.isSecret()){
+			for(File f:defaultPath.listFiles()){
+				if(f.getName().matches(".*flv")){
+					SerieFileModel model = new SerieFileModel();
+					model.setFile(f);
+					model.setFilePath(f.getAbsolutePath());
+					SerieFilePK pk = new SerieFilePK();
+					Pattern pattern = Pattern.compile(".*([0-9]{3,4}).flv");
+					Matcher matcher = pattern.matcher(f.getName());
+					if (matcher.matches()) {
+						pk.setEpisodio(matcher.group(1));
+					}else{
+						pk.setEpisodio("???");
+					}
+					pk.setTemporada(0);
+					pk.setIdSerie(serieModel.getId());
+					model.setPk(pk);
+					sfms.add(model);
+				}
+			}
+		}	
+		return sfms;
+	}
 
 	public List<SerieFileModel> listarSeriesFiles(Integer idSerie) {
 		@SuppressWarnings("unchecked")
@@ -166,6 +194,43 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements
 			return (HistoricoModel) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
+		}
+	}
+	
+	@Override
+	public void setAllSecretSeriesInvisible() {
+		try {
+			List<SerieModel> series = new ArrayList<SerieModel>();
+			Query q = em.createQuery(
+					"SELECT s FROM SerieModel s WHERE s.secret > 0");
+			;
+			series = q.getResultList();
+			if(series!=null && series.size()>0){
+				for(SerieModel s:series){
+					s.setVisible(false);
+					em.persist(s);
+				}
+			}
+		} catch (NoResultException e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void setAllSecretSeriesVisible() {
+		try {
+			List<SerieModel> series = new ArrayList<SerieModel>();
+			Query q = em.createQuery(
+					"SELECT s FROM SerieModel s WHERE s.secret > 0 ");
+			;
+			series = q.getResultList();
+			if(series!=null && series.size()>0){
+				for(SerieModel s:series){
+					s.setVisible(true);
+					em.persist(s);
+				}
+			}
+		} catch (NoResultException e) {
+			e.printStackTrace();
 		}
 	}
 
