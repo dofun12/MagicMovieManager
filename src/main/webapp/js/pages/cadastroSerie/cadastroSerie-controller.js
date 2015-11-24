@@ -3,7 +3,7 @@
  */
 
 angular.module('MainModule', []).controller('CadastroSerieController', function($scope, $browser, $window, $browser, $interval, CadastroSerieService) {
-	$scope.regexDisp = [ '.*([0-9]{3}).mp4', '.*([0-9]{2}).mp4', '.*(S[0-9]{2}E[0-9]{2}).*',  '.*([0-9]{4}).flv'];
+	$scope.regexDisp = [ '.*([0-9]{3}).mp4', '.*([0-9]{2}).mp4', '.*(S[0-9]{2}E[0-9]{2}).*',  '.*([0-9]{3,4}).flv'];
 	$scope.temporadas = [];
 	$scope.isNovaSerie = true;
 	$scope.files = [];

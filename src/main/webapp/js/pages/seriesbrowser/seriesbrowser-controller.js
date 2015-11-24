@@ -25,19 +25,19 @@ angular.module('MainModule')
 	
 	
 	$scope.selecionarSerie = function(obj) {
-		$scope.selectedSerie = obj;
-		$scope.isSerieSelecionada = true;
-		console.log(obj);
 		if(obj.secret){
 			$scope.isSecretSerie = true; 
 			console.log("Secret Serie xD");
 			SeriesBrowserService.listarSerieSecreta(obj).then( function (response) {
-				$scope.selectedSerie.files = response.data
+				obj.files = response.data;
+				$scope.isSerieSelecionada = true;
+				$scope.selectedSerie = obj;
 			});
 		}else{
+			$scope.selectedSerie = obj;
+			$scope.isSerieSelecionada = true;
 			$scope.isSecretSerie = false;
 		}
-		console.log($scope.selectedSerie);
 		$scope.buscarultimaSerieAssistida(obj);
 	};
 	
