@@ -15,11 +15,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.lemanoman.testeweb.model.rest.MPHCResponseModel;
+
 @Entity
 @Table(name = "historico")
 public class HistoricoModel {
-	@EmbeddedId
-	private HistoricoPK pk;
+	@Id
+	@Column(name="id_mediafile")
+	private Integer idMediafile;
 
 	@Transient
 	private MPHCResponseModel status;
@@ -31,57 +34,47 @@ public class HistoricoModel {
 	private Double percentWatched;
 	
 	@Column
-	private String positionstring;
-	
-	public String getPositionstring() {
-		return positionstring;
-	}
-
-	public void setPositionstring(String positionstring) {
-		this.positionstring = positionstring;
-	}
-
-	@Column
 	private Long lastPosition;
 
-	public HistoricoPK getPk() {
-		return pk;
+	public Integer getIdMediafile() {
+	    return idMediafile;
 	}
 
-	public void setPk(HistoricoPK pk) {
-		this.pk = pk;
+	public void setIdMediafile(Integer idMediafile) {
+	    this.idMediafile = idMediafile;
 	}
 
 	public MPHCResponseModel getStatus() {
-		return status;
+	    return status;
 	}
 
 	public void setStatus(MPHCResponseModel status) {
-		this.status = status;
+	    this.status = status;
 	}
 
 	public Date getLastTimeWatched() {
-		return lastTimeWatched;
+	    return lastTimeWatched;
 	}
 
 	public void setLastTimeWatched(Date lastTimeWatched) {
-		this.lastTimeWatched = lastTimeWatched;
+	    this.lastTimeWatched = lastTimeWatched;
 	}
 
 	public Double getPercentWatched() {
-		return percentWatched;
+	    return percentWatched;
 	}
 
 	public void setPercentWatched(Double percentWatched) {
-		this.percentWatched = percentWatched;
+	    this.percentWatched = percentWatched;
 	}
 
 	public Long getLastPosition() {
-		return lastPosition;
+	    return lastPosition;
 	}
 
 	public void setLastPosition(Long lastPosition) {
-		this.lastPosition = lastPosition;
+	    this.lastPosition = lastPosition;
 	}
+	
 	
 }

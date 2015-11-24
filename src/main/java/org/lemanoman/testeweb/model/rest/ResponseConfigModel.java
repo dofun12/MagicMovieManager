@@ -1,4 +1,4 @@
-package org.lemanoman.testeweb.model;
+package org.lemanoman.testeweb.model.rest;
 
 public class ResponseConfigModel {
 	private boolean isValid;

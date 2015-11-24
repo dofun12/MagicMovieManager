@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.lemanoman.testeweb.model.HistoricoModel;
 import org.lemanoman.testeweb.model.HistoricoPK;
-import org.lemanoman.testeweb.model.MPHCResponseModel;
-import org.lemanoman.testeweb.model.MPHCStatusType;
 import org.lemanoman.testeweb.model.SerieFileModel;
+import org.lemanoman.testeweb.model.rest.MPHCResponseModel;
+import org.lemanoman.testeweb.model.rest.MPHCStatusType;
 import org.lemanoman.testeweb.restcontroller.MPHCController;
 import org.lemanoman.testeweb.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;

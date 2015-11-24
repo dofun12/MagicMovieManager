@@ -1,4 +1,4 @@
-package org.lemanoman.testeweb.model;
+package org.lemanoman.testeweb.model.rest;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

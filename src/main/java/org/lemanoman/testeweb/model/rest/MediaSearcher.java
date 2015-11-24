@@ -1,4 +1,4 @@
-package org.lemanoman.testeweb.model;
+package org.lemanoman.testeweb.model.rest;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;

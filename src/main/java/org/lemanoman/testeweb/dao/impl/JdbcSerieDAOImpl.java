@@ -14,13 +14,16 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
+import org.lemanoman.testeweb.model.EpisodioModel;
+import org.lemanoman.testeweb.model.EpisodioPK;
 import org.lemanoman.testeweb.model.FileModel;
 import org.lemanoman.testeweb.model.HistoricoModel;
-import org.lemanoman.testeweb.model.NovaSerieModel;
+import org.lemanoman.testeweb.model.MediaFileModel;
 import org.lemanoman.testeweb.model.SerieFileMapper;
 import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieFilePK;
 import org.lemanoman.testeweb.model.SerieModel;
+import org.lemanoman.testeweb.model.rest.NovaSerieModel;
 import org.lemanoman.testeweb.model.SerieMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -29,7 +32,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 
 @Repository
-public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements JdbcSerieDAO {
+public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements JdbcSerieDAO {
 
 	@PersistenceContext
 	protected EntityManager em;
@@ -60,7 +63,12 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements
 			}else{
 				serie = new SerieModel();
 				serie.setName(novaSerie.getSerie().getName());
-				serie.setSecret(novaSerie.getSerie().isSecret());
+				if(novaSerie.getSerie()!=null && novaSerie.getSerie().getVisible()){
+				    serie.setVisible(novaSerie.getSerie().getVisible()); 
+				}else{
+				    serie.setVisible(true);
+				}
+				
 				em.persist(serie);
 				em.flush();
 			}	
@@ -68,21 +76,12 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements
 			
 
 		Integer idSerie = serie.getId();
-		for (FileModel f : novaSerie.getEpisodios()) {
-			if (idSerie != null && f.getEpisodio() != null && f.getEpisodio() != "") {
-				SerieFileModel sfm = getSerieFileModel(idSerie, f.getEpisodio(), novaSerie.getTemporada());
-				if (sfm == null) {
-					sfm = new SerieFileModel();
-					SerieFilePK pk = new SerieFilePK();
-					pk.setEpisodio(f.getEpisodio());
-					pk.setIdSerie(idSerie);
-					pk.setTemporada(novaSerie.getTemporada());
-					sfm.setPk(pk);
-				}
-
-				sfm.setFilePath(f.getPath());
-				em.persist(sfm);
-			}
+		for (EpisodioModel ep : novaSerie.getEpisodios()) {
+		    MediaFileModel mediaFileModel = getMediaFileModel(ep.getIdMediafile());
+		    if(mediaFileModel==null){
+			mediaFileModel = new MediaFileModel();
+		    }
+		    
 		}
 
 	}
@@ -119,14 +118,18 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements
 		return null;
 	}
 
-	public SerieFileModel getSerieFileModel(Integer idSerie, String episodio, Integer temporada) {
-		SerieFilePK pk = new SerieFilePK();
-		pk.setEpisodio(episodio);
+	public EpisodioModel getEpisodio(Integer idSerie, String nameEpisodio, Integer temporada) {
+	    	EpisodioPK pk = new EpisodioPK();
+		pk.setName(nameEpisodio);
 		pk.setIdSerie(idSerie);
 		pk.setTemporada(temporada);
-		return em.find(SerieFileModel.class, pk);
+		return em.find(EpisodioModel.class, pk);
 	}
 
+	public MediaFileModel getMediaFileModel(Integer id){
+	    return em.find(MediaFileModel.class, id);
+	}
+	
 	public List<SerieModel> listarSeries() {
 		List<SerieModel> tmp = new ArrayList<SerieModel>();
 		List<SerieModel> series = em.createQuery("from SerieModel s", SerieModel.class).getResultList();
@@ -142,7 +145,7 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<SerieFileModel> implements
 	public List<SerieFileModel> listarSerieSecreta(SerieModel serieModel) {
 		List<SerieFileModel> sfms = new ArrayList();
 		File defaultPath = new File("F:\\DataFiles\\temp");
-		if(serieModel!=null && serieModel.isSecret()){
+		if(serieModel!=null && serieModel.getSecret()){
 			for(File f:defaultPath.listFiles()){
 				if(f.getName().matches(".*flv")){
 					SerieFileModel model = new SerieFileModel();

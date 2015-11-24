@@ -1,12 +1,15 @@
-package org.lemanoman.testeweb.model;
+package org.lemanoman.testeweb.model.rest;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lemanoman.testeweb.model.EpisodioModel;
+import org.lemanoman.testeweb.model.SerieModel;
+
 public class NovaSerieModel {
     private SerieModel serie;
     private Integer temporada;
-    private List<FileModel> episodios = new ArrayList<FileModel>();
+    private List<EpisodioModel> episodios = new ArrayList<EpisodioModel>();
     public SerieModel getSerie() {
         return serie;
     }
@@ -19,10 +22,10 @@ public class NovaSerieModel {
     public void setTemporada(Integer temporada) {
         this.temporada = temporada;
     }
-    public List<FileModel> getEpisodios() {
+    public List<EpisodioModel> getEpisodios() {
         return episodios;
     }
-    public void setEpisodios(List<FileModel> episodios) {
+    public void setEpisodios(List<EpisodioModel> episodios) {
         this.episodios = episodios;
     }
     

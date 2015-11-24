@@ -6,27 +6,35 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class HistoricoPK implements Serializable {
+public class EpisodioPK implements Serializable {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
     
     @Column
-    private String episodio;
-    
-    @Column
-    private Integer idSerie;
-    
-    @Column
     private Integer temporada;
+    
+    @Column
+    private String name;
+    
+    @Column(name="id_serie")
+    private Integer idSerie;
 
-    public String getEpisodio() {
-        return episodio;
+    public Integer getTemporada() {
+        return temporada;
     }
 
-    public void setEpisodio(String episodio) {
-        this.episodio = episodio;
+    public void setTemporada(Integer temporada) {
+        this.temporada = temporada;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getIdSerie() {
@@ -37,14 +45,6 @@ public class HistoricoPK implements Serializable {
         this.idSerie = idSerie;
     }
 
-    public Integer getTemporada() {
-        return temporada;
-    }
-
-    public void setTemporada(Integer temporada) {
-        this.temporada = temporada;
-    }
-
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
@@ -53,8 +53,8 @@ public class HistoricoPK implements Serializable {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((episodio == null) ? 0 : episodio.hashCode());
 	result = prime * result + ((idSerie == null) ? 0 : idSerie.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
 	result = prime * result + ((temporada == null) ? 0 : temporada.hashCode());
 	return result;
     }
@@ -67,16 +67,16 @@ public class HistoricoPK implements Serializable {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	HistoricoPK other = (HistoricoPK) obj;
-	if (episodio == null) {
-	    if (other.episodio != null)
-		return false;
-	} else if (!episodio.equals(other.episodio))
-	    return false;
+	EpisodioPK other = (EpisodioPK) obj;
 	if (idSerie == null) {
 	    if (other.idSerie != null)
 		return false;
 	} else if (!idSerie.equals(other.idSerie))
+	    return false;
+	if (name == null) {
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
 	    return false;
 	if (temporada == null) {
 	    if (other.temporada != null)
@@ -85,6 +85,9 @@ public class HistoricoPK implements Serializable {
 	    return false;
 	return true;
     }
+
     
-   
+    
+    
+    
 }

@@ -75,7 +75,6 @@ angular.module('MainModule')
 	$scope.updateStatus = function(){
 		SeriesBrowserService.getStatusMPHC().success( function (response) {
 			if(response.file==null){
-				console.log(response);
 				$scope.isRunning = false;
 			}else{
 				$scope.isRunning = true;

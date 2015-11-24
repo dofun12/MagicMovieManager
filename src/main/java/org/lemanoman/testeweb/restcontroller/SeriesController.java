@@ -26,15 +26,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.FileModel;
-import org.lemanoman.testeweb.model.GreetingModel;
 import org.lemanoman.testeweb.model.HistoricoModel;
 import org.lemanoman.testeweb.model.HistoricoPK;
-import org.lemanoman.testeweb.model.MPHCResponseModel;
-import org.lemanoman.testeweb.model.MPHCStatusType;
-import org.lemanoman.testeweb.model.NovaSerieModel;
-import org.lemanoman.testeweb.model.RegexTesterModel;
 import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieModel;
+import org.lemanoman.testeweb.model.rest.GreetingModel;
+import org.lemanoman.testeweb.model.rest.MPHCResponseModel;
+import org.lemanoman.testeweb.model.rest.MPHCStatusType;
+import org.lemanoman.testeweb.model.rest.NovaSerieModel;
+import org.lemanoman.testeweb.model.rest.RegexTesterModel;
 import org.lemanoman.testeweb.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -185,7 +185,7 @@ public class SeriesController {
 				return null;
 			}
 		} else {
-			if (new File("/").exists()) {
+			if (!new File("/").exists()) {
 				char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 				int id = 1;
 				for (char abc : alphabet) {
@@ -228,7 +228,7 @@ public class SeriesController {
 			if(file.exists()){
 				file = file.getParentFile();
 				if(file == null){
-					if (new File("/").exists()) {
+					if (!new File("/").exists()) {
 						char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 						int id = 1;
 						for (char abc : alphabet) {

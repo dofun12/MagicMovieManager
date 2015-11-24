@@ -1,6 +1,6 @@
 package org.lemanoman.testeweb.restcontroller;
  
-import org.lemanoman.testeweb.model.BuscaModel;
+import org.lemanoman.testeweb.model.rest.BuscaModel;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

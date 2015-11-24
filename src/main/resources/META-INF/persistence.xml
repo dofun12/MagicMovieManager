@@ -4,10 +4,11 @@
     <persistence-unit name="persistenceUnitSQLite" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>org.lemanoman.testeweb.model.HistoricoModel</class>
-        <class>org.lemanoman.testeweb.model.SerieFilePK</class>
-        <class>org.lemanoman.testeweb.model.HistoricoPK</class>
-        <class>org.lemanoman.testeweb.model.SerieFileModel</class>
         <class>org.lemanoman.testeweb.model.SerieModel</class>
+        <class>org.lemanoman.testeweb.model.EpisodioModel</class>
+        <class>org.lemanoman.testeweb.model.EpisodioPK</class>
+        <class>org.lemanoman.testeweb.model.MediaFileModel</class>
+        <class>org.lemanoman.testeweb.model.ConfigModel</class>
         <properties>
             <!-- <property name="hibernate.dialect" value="org.lemanoman.testeweb.configuration.SQLiteDialect"/>--> 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />

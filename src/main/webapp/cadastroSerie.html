@@ -62,15 +62,15 @@
 								<span class="glyphicon glyphicon-menu-left"></span>
 							</button>
 						</div>
-						<div class="panel-body"  style="height: 400px;overflow: auto;width: 100%;">
-							<div class="col-sm-12 list-group" ng-repeat="fileview in viewFiles">
+						<div class="panel-body"  style="min-height:200px;max-height: 300px;overflow: auto;width: 100%;padding:0px;">
+							<div class="col-sm-6 col-lg-3" ng-repeat="fileview in viewFiles"  style="padding:0px;">
 								<button ng-show="fileview.directory" class="list-group-item"
 									ng-click="viewDirectory(fileview);"
 								>
 									<div>
-										<div>
+										<div title="{{fileview.name}}" style="max-width: 190px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
 											<span class="glyphicon glyphicon-folder-close"></span>
-											<span style="margin-left: 8px">{{fileview.name}}</span>
+											<span style="margin-left: 8px;">{{fileview.name}}</span>
 										</div>
 									</div>
 									
