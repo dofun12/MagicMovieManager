@@ -9,6 +9,7 @@
         <class>org.lemanoman.testeweb.model.EpisodioPK</class>
         <class>org.lemanoman.testeweb.model.MediaFileModel</class>
         <class>org.lemanoman.testeweb.model.ConfigModel</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <!-- <property name="hibernate.dialect" value="org.lemanoman.testeweb.configuration.SQLiteDialect"/>--> 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
