@@ -178,10 +178,10 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements 
 	}
 
 	@Override
-	public List<SerieFileModel> listarSeriesFilesByPath(String path) {
+	public List<EpisodioModel> listarSeriesFilesByPath(String path) {
 		@SuppressWarnings("unchecked")
-		List<SerieFileModel> sfm = (List<SerieFileModel>) em
-				.createQuery("SELECT c FROM SerieFileModel c WHERE c.filePath = :path ").setParameter("path", path)
+		List<EpisodioModel> sfm = (List<EpisodioModel>) em
+				.createQuery("SELECT c FROM EpisodioModel c WHERE c.filePath = :path ").setParameter("path", path)
 				.getResultList();
 		return sfm;
 	}
