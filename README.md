@@ -10,4 +10,4 @@ MagicMovieManager
 - [ ] Cadastro de episodios
 - [ ] Transformar o file view em diretiva
 - [ ] Gerar preview do ultimo episodio
-- [ ] Salvar a duraçao do HistoricoModel em Long
+- [X] Salvar a duraçao do HistoricoModel em Long
