@@ -3,9 +3,6 @@ package org.lemanoman.testeweb.service.impl;
 import java.util.List;
 
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
-import org.lemanoman.testeweb.model.HistoricoModel;
-import org.lemanoman.testeweb.model.HistoricoPK;
-import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieModel;
 import org.lemanoman.testeweb.model.rest.NovaSerieModel;
 import org.lemanoman.testeweb.service.SerieService;
@@ -23,55 +20,10 @@ public class SerieServiceImpl implements SerieService {
 	    dao.adicionarSerie(novaSerie);
 	}
 
-	@Override
-	public List<SerieModel> listarSeriesOffline() {
-		return dao.listarSeriesOffline();
-	}
-
-	public void updateCatalogo() {
-		dao.updateCatalogo();
-	}
 
 	public List<SerieModel> listarSeries() {
 		return dao.listarSeries();
 	}
 
-	public List<SerieFileModel> listarSeriesByPath(String path) {
-		return dao.listarSeriesFilesByPath(path);
-	}
-	
-	public List<SerieFileModel> listarSerieSecreta(SerieModel serieModel){
-		return dao.listarSerieSecreta(serieModel);
-	}
-	
-	public void salvarHistorico(HistoricoModel model) {
-		if (model != null && model.getPk() != null) {
-			dao.salvarHistorico(model);
-		}
-	}
-	
-	public void deleteAllSerieFileModel(Integer idSerie) {
-	    dao.deleteAllSeriesFileModel(idSerie);
-	}
-	
-	@Override
-	public void setAllSecretSeriesVisible() {
-	    dao.setAllSecretSeriesVisible();
-	}
-	
-	@Override
-	public void setAllSecretSeriesInvisible() {
-	    dao.setAllSecretSeriesInvisible();
-	}
-
-	@Override
-	public HistoricoModel getHistoricoModel(HistoricoPK pk) {
-		return dao.find(HistoricoModel.class, pk);
-	}
-	
-	@Override
-	public HistoricoModel getUltimaSerieAssistida(Integer idSerie) {
-		return dao.ultimoEpisodioAssistido(idSerie);
-	}
 
 }

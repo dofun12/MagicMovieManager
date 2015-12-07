@@ -1,51 +1,15 @@
 package org.lemanoman.testeweb.restcontroller;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.lemanoman.testeweb.dao.JdbcSerieDAO;
-import org.lemanoman.testeweb.model.FileModel;
-import org.lemanoman.testeweb.model.HistoricoModel;
-import org.lemanoman.testeweb.model.HistoricoPK;
-import org.lemanoman.testeweb.model.SerieFileModel;
 import org.lemanoman.testeweb.model.SerieModel;
-import org.lemanoman.testeweb.model.rest.GreetingModel;
-import org.lemanoman.testeweb.model.rest.MPHCResponseModel;
-import org.lemanoman.testeweb.model.rest.MPHCStatusType;
 import org.lemanoman.testeweb.model.rest.NovaSerieModel;
-import org.lemanoman.testeweb.model.rest.RegexTesterModel;
 import org.lemanoman.testeweb.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
 public class SeriesController {
@@ -58,6 +22,17 @@ public class SeriesController {
 		return service.listarSeries();
 	}
 
+	@RequestMapping(value = "/adicionarSerie", method = RequestMethod.POST)
+	public void adicionarSerie(@RequestBody NovaSerieModel novaSerie) {
+		if (novaSerie != null) {
+			if(novaSerie.getSerie()!=null && novaSerie.getSerie().getId()!=null){
+				//service.deleteAllSerieFileModel(novaSerie.getSerie().getId());
+			}
+			service.adicionarSerie(novaSerie);
+		}
+	}
+	
+	/**
 	@RequestMapping(value = "/testarRegex", method = RequestMethod.POST)
 	public List<FileModel> testarRegex(@RequestBody RegexTesterModel regex) {
 		List<FileModel> list = new ArrayList<FileModel>();
@@ -78,15 +53,7 @@ public class SeriesController {
 		return list;
 	}
 
-	@RequestMapping(value = "/adicionarSerie", method = RequestMethod.POST)
-	public void adicionarSerie(@RequestBody NovaSerieModel novaSerie) {
-		if (novaSerie != null) {
-			if(novaSerie.getSerie()!=null && novaSerie.getSerie().getId()!=null){
-				service.deleteAllSerieFileModel(novaSerie.getSerie().getId());
-			}
-			service.adicionarSerie(novaSerie);
-		}
-	}
+	
 
 	@RequestMapping(value = "/ultimaSerieAssistida", method = RequestMethod.POST)
 	public HistoricoModel ultimaSerieAssistida(@RequestBody SerieModel serie) {
@@ -294,5 +261,5 @@ public class SeriesController {
 	List<SerieFileModel> listarSerieSecreta(@RequestBody SerieModel serieModel) {
 		return service.listarSerieSecreta(serieModel);
 	}
-	
+	**/
 }

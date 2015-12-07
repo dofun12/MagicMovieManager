@@ -1,35 +1,19 @@
 package org.lemanoman.testeweb.dao.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.naming.spi.DirStateFactory.Result;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import org.lemanoman.testeweb.dao.JdbcSerieDAO;
 import org.lemanoman.testeweb.model.EpisodioModel;
-import org.lemanoman.testeweb.model.EpisodioPK;
-import org.lemanoman.testeweb.model.FileModel;
-import org.lemanoman.testeweb.model.HistoricoModel;
 import org.lemanoman.testeweb.model.MediaFileModel;
-import org.lemanoman.testeweb.model.SerieFileMapper;
-import org.lemanoman.testeweb.model.SerieFileModel;
-import org.lemanoman.testeweb.model.SerieFilePK;
 import org.lemanoman.testeweb.model.SerieModel;
 import org.lemanoman.testeweb.model.rest.NovaSerieModel;
-import org.lemanoman.testeweb.model.SerieMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
-import javax.persistence.Query;
 
 @Repository
 public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements JdbcSerieDAO {
@@ -53,6 +37,18 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements 
 		}
 
 		return em.createQuery("from SerieModel s", SerieModel.class).getResultList();
+	}
+	
+	public List<SerieModel> listarSeries() {
+		List<SerieModel> tmp = new ArrayList<SerieModel>();
+		List<SerieModel> series = em.createQuery("from SerieModel s", SerieModel.class).getResultList();
+		if (series != null) {
+			for (SerieModel s : series) {
+			    //s.setFiles(listarSeriesFiles(s.getId()));
+			    tmp.add(s);
+			}
+		}
+		return tmp;
 	}
 
 	public void adicionarSerie(NovaSerieModel novaSerie) {
@@ -85,9 +81,16 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements 
 		}
 
 	}
-
+	public MediaFileModel getMediaFileModel(Integer id){
+	    return em.find(MediaFileModel.class, id);
+	}
+	
+	public <T> T find(Class<T> type, Object key) {
+		return em.find(type, key);
+	}
+	
+	/**
 	public void updateCatalogo() {
-		/**
 		 * List<SerieModel> sources = listarSeriesOffline(); for (SerieModel
 		 * source : sources) { Integer id = source.getId(); File file = new
 		 * File(source.getFilepath()); for (File media : file.listFiles()) {
@@ -105,7 +108,6 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements 
 		 * mediaFile.setPk(pk); mediaFile.setFile(media);
 		 * mediaFile.setFilePath(mediaFile.getFile().getAbsolutePath());
 		 * em.persist(mediaFile); } }
-		 **/
 	}
 
 	private String getVarEpisodio(String name, String regex) {
@@ -126,21 +128,9 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements 
 		return em.find(EpisodioModel.class, pk);
 	}
 
-	public MediaFileModel getMediaFileModel(Integer id){
-	    return em.find(MediaFileModel.class, id);
-	}
 	
-	public List<SerieModel> listarSeries() {
-		List<SerieModel> tmp = new ArrayList<SerieModel>();
-		List<SerieModel> series = em.createQuery("from SerieModel s", SerieModel.class).getResultList();
-		if (series != null) {
-			for (SerieModel s : series) {
-				s.setFiles(listarSeriesFiles(s.getId()));
-				tmp.add(s);
-			}
-		}
-		return tmp;
-	}
+	
+	
 	
 	public List<SerieFileModel> listarSerieSecreta(SerieModel serieModel) {
 		List<SerieFileModel> sfms = new ArrayList();
@@ -237,9 +227,7 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements 
 		}
 	}
 
-	public <T> T find(Class<T> type, Object key) {
-		return em.find(type, key);
-	}
+	
 	
 	public void deleteAllSeriesFileModel(Integer idSerie){
 	    List<SerieFileModel> seriesFileModel = listarSeriesFiles(idSerie);
@@ -265,5 +253,5 @@ public class JdbcSerieDAOImpl extends JdbcBaseDAOImpl<EpisodioModel> implements 
 			em.persist(hist);
 		}
 	}
-
+	**/
 }

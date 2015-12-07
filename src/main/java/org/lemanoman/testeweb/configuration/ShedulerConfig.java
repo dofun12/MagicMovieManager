@@ -1,20 +1,10 @@
 package org.lemanoman.testeweb.configuration;
 
-import java.util.Date;
-import java.util.List;
-
-import org.lemanoman.testeweb.model.HistoricoModel;
-import org.lemanoman.testeweb.model.HistoricoPK;
-import org.lemanoman.testeweb.model.SerieFileModel;
-import org.lemanoman.testeweb.model.rest.MPHCResponseModel;
-import org.lemanoman.testeweb.model.rest.MPHCStatusType;
 import org.lemanoman.testeweb.restcontroller.MPHCController;
 import org.lemanoman.testeweb.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 @Configuration
 @EnableScheduling
@@ -25,6 +15,7 @@ public class ShedulerConfig {
     @Autowired
     private SerieService service;
     
+    /**
     @Scheduled(fixedDelay=5000)
     public void doSomething() {
     	MPHCResponseModel status = controller.getStatus();
@@ -57,7 +48,9 @@ public class ShedulerConfig {
     		}
     		
     	}
+    
     	
     	
     }
+    **/	
 }
